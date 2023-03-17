@@ -11,4 +11,6 @@ public interface IEventSingleton
     /// Заглушка для проверки существования изображения
     /// </summary>
     public List<Guid> Images { get; set; }
+
+    public List<IUser> Users { get; set; }
 }

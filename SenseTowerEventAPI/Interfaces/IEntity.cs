@@ -1,6 +1,9 @@
-﻿namespace SenseTowerEventAPI.Interfaces;
+﻿using JetBrains.Annotations;
 
+namespace SenseTowerEventAPI.Interfaces;
+
+[UsedImplicitly]
 public interface IEntity
 {
-    public Guid ID { get; }
+    public Guid Id { get; }
 }

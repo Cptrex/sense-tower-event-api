@@ -16,10 +16,10 @@ public class EventUpdateCommandHandler : IRequestHandler<EventUpdateCommand, Gui
 
     public async Task<Guid> Handle(EventUpdateCommand request, CancellationToken cancellationToken)
     {
-        var selectedEvent = (Models.Event) _eventInstance.Events.FirstOrDefault(e=> e.ID == request.ID)!;
+        var selectedEvent = (Models.Event) _eventInstance.Events.FirstOrDefault(e=> e.Id == request.Id)!;
 
-        selectedEvent.UpdateEvent(request.StartDate, request.EndDate, request.Title, request.Description, request.ImageID, request.SpaceID);
+        selectedEvent.UpdateEvent(request.StartDate, request.EndDate, request.Title, request.Description, request.ImageId, request.SpaceId);
 
-        return await Task.FromResult(request.ID);
+        return await Task.FromResult(request.Id);
     }
 }

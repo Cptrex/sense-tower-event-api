@@ -7,24 +7,29 @@ namespace SenseTowerEventAPI.Models;
 /// Модель билетов
 /// </summary>
 [SwaggerSchema("Модель билетов")]
-public class Ticket : ITicket
+public class Ticket : ITicket, IEntity
 {
     /// <summary>
     /// Уникальный идентификатор билета
     /// </summary>
-    public Guid ID { get; set; }
+    public Guid Id { get; set; }
+    /// <summary>
+    /// Уникальный идентификатор мероприятия
+    /// </summary>
+    public Guid EventId { get; set; }
     /// <summary>
     /// Владелец билета
     /// </summary>
-    public string Owner { get; set; }
+    public Guid Owner { get; set; }
     /// <summary>
     /// Место мероприятия
     /// </summary>
     public string? Place { get; set; }
 
-    public Ticket(Guid id, string owner, string place)
+    public Ticket(Guid id, Guid eventId, Guid owner, string? place)
     {
-        ID = id;
+        Id = id;
+        EventId = eventId;
         Owner = owner;
         Place = place;
     }

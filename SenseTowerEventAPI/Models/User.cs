@@ -1,16 +1,19 @@
 ﻿using JetBrains.Annotations;
+using SenseTowerEventAPI.Interfaces;
 
 namespace SenseTowerEventAPI.Models;
 
 [UsedImplicitly]
-public class User
+public class User : IUser, IEntity
 {
-    public Guid ID { get; set; }
+    public Guid Id { get; set; }
     public string Username { get; set; }
+    public List<ITicket> Tickets { get; set; }
 
-    public User(Guid id, string username)
+    public User(Guid id, string username, List<ITicket> tickets)
     {
-        ID = id;
+        Id = id;
         Username = username;
+        Tickets = tickets;
     }
 }

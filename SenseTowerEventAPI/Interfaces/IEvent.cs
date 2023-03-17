@@ -11,7 +11,7 @@ public interface IEvent
     /// <summary>
     /// Уникальный идентификатор мероприятия
     /// </summary>
-    public Guid ID { get; set; }
+    public Guid Id { get; set; }
     /// <summary>
     /// Название мероприятия
     /// </summary>
@@ -31,13 +31,13 @@ public interface IEvent
     /// <summary>
     /// Уникальный идентификатор изображения мероприятия
     /// </summary>
-    public Guid ImageID { get; set; }
+    public Guid ImageId { get; set; }
     /// <summary>
     /// Уникальный идентификатор пространства мероприятия
     /// </summary>
-    public Guid SpaceID { get; set; }
+    public Guid SpaceId { get; set; }
     /// <summary>
     /// Список билетов мероприятия
     /// </summary>
-    public List<Models.Ticket> Tickets { get; set; }
+    public List<ITicket> Tickets { get; set; }
 }
