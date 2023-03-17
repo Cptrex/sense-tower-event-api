@@ -1,86 +1,83 @@
-﻿using MediatR;
+﻿using FluentValidation.Results;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SC.Internship.Common.ScResult;
 using SenseTowerEventAPI.Features.Event.EventCreate;
 using SenseTowerEventAPI.Features.Event.EventDelete;
-using SenseTowerEventAPI.Features.Event.EventRead;
+using SenseTowerEventAPI.Features.Event.EventGetList;
 using SenseTowerEventAPI.Features.Event.EventUpdate;
 using SenseTowerEventAPI.Interfaces;
 
-namespace SenseTowerEventAPI.Features.Event
+namespace SenseTowerEventAPI.Features.Event;
+
+[ApiController]
+[AllowAnonymous]
+[Route("[controller]")]
+public class EventController : ControllerBase
 {
-    [ApiController]
-    [Route("api/v1/events")]
-    public class EventController : ControllerBase
+    private readonly IMediator _mediator;
+    private readonly IEventValidatorBehavior _validator;
+
+    public EventController(IMediator mediator, IEventValidatorBehavior validator)
     {
-        private readonly IMediator _mediator;
-        private readonly IEventValidatorBehavior _validator;
+        _mediator = mediator;
+        _validator = validator;
+    }
 
-        public EventController(IMediator mediator, IEventValidatorBehavior validator)
-        {
-            _mediator = mediator;
-            _validator = validator;
-        }
+    /// <summary>
+    /// Создать мероприятие
+    /// </summary>
+    /// <param name="cmd">Поля мероприятия</param>
+    /// <returns>Возвращает HTTP Response Code</returns>
+    /// <remarks> GUID для проверки валидации ImageID и SpaceID 3fa85f64-5717-4562-b3fc-2c963f66afa6</remarks>
+    [HttpPost("create")]
+    public async Task<ScResult> CreateEvent(EventCreateCommand cmd)
+    {
+        var result = _validator.Validate(cmd);
+        await _mediator.Send(cmd);
 
-        /// <summary>
-        /// Создать мероприятие
-        /// </summary>
-        /// <param name="cmd">Поля мероприятия</param>
-        /// <returns>Возвращает HTTP Response Code</returns>
-        /// <remarks> GUID для проверки валидации ImageID и SpaceID 3fa85f64-5717-4562-b3fc-2c963f66afa6</remarks>
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateEvent(EventCreateCommand cmd)
-        {
-            var validationResult = await _validator.Validate(cmd);
+        return new ScResult<ValidationResult>(result);
+    }
 
-            if(validationResult.IsValid == false)
-            {
-                var validationFailure = validationResult.Errors.FirstOrDefault(e => e.PropertyName == "SpaceID" ||  e.PropertyName == "ImageID" || e.PropertyName =="StartDate" 
-                        || e.PropertyName == "EndDate");
+    /// <summary>
+    /// Удалить выбранное мероприятия по GUID
+    /// </summary>
+    /// <param name="eventId">GUID мероприятия</param>
+    /// <returns>Возвращает HTTP Response Code</returns>
+    [HttpDelete("delete/{eventId:guid}")]
+    public async Task<ScResult> DeleteEvent([FromRoute] Guid eventId)
+    {
+        var cmd = new EventDeleteCommand { ID = eventId };
+        await _mediator.Send(cmd);
 
-                if(validationFailure != null) return BadRequest($"{validationFailure.ErrorMessage}");
-            }
+        return new ScResult();
+    }
 
-            await _mediator.Send(cmd);
+    /// <summary>
+    /// Изменить информацию выбранного мероприятия по GUID
+    /// </summary>
+    /// <param name="eventId">GUID мероприятия</param>
+    /// <param name="cmd">Поля мероприятия</param>
+    /// <returns>Возвращает HTTP Response Code</returns>
+    [HttpPut("update/{eventId:guid}")]
+    public async Task<ScResult> UpdateEventById([FromRoute] Guid eventId, EventUpdateCommand cmd)
+    {
+        await _mediator.Send(cmd);
 
-            return Ok();
-        }
+        return new ScResult();
+    }
 
-        /// <summary>
-        /// Удалить выбранное мероприятия по GUID
-        /// </summary>
-        /// <param name="eventId">GUID мероприятия</param>
-        /// <returns>Возвращает HTTP Response Code</returns>
-        [HttpDelete("delete/{eventId:guid}")]
-        public async Task<IActionResult> DeleteEvent([FromRoute] Guid eventId)
-        {
-            EventDeleteCommand cmd = new EventDeleteCommand { ID = eventId };
-            await _mediator.Send(cmd);
-            return Ok();
-        }
+    /// <summary>
+    /// Получить весь список активных мероприятий
+    /// </summary>
+    /// <returns>Список всех активных мероприятий</returns>
+    [HttpGet]
+    public async Task<ScResult<IEnumerable<IEvent>>> GetEventsList()
+    {
+        var cmd = new EventGetListQuery();
+        var eventList = await _mediator.Send(cmd);
 
-        /// <summary>
-        /// Изменить информацию выбранного мероприятия по GUID
-        /// </summary>
-        /// <param name="eventId">GUID мероприятия</param>
-        /// <param name="cmd">Поля мероприятия</param>
-        /// <returns>Возвращает HTTP Response Code</returns>
-        [HttpPut("update/{eventId:guid}")]
-        public async Task<IActionResult> UpdateEventById([FromRoute] Guid eventId, EventUpdateCommand cmd)
-        {
-            await _mediator.Send(cmd);
-            return Ok();
-        }
-
-        /// <summary>
-        /// Получить весь список активных мероприятий
-        /// </summary>
-        /// <returns>Список всех активных мероприятий</returns>
-        [HttpGet]
-        public async Task<IActionResult> GetEventsList()
-        {
-            EventGetListQuery cmd = new EventGetListQuery();
-            var eventList = await _mediator.Send(cmd);
-            return Ok(eventList);
-        }
+        return new ScResult<IEnumerable<IEvent>>(eventList);
     }
 }

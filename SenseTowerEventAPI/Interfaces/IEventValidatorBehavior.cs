@@ -1,9 +1,8 @@
 ﻿using FluentValidation.Results;
 
-namespace SenseTowerEventAPI.Interfaces
+namespace SenseTowerEventAPI.Interfaces;
+
+public interface IEventValidatorBehavior
 {
-    public interface IEventValidatorBehavior
-    {
-        Task<ValidationResult> Validate(IEvent ievent);
-    }
+    ValidationResult Validate(IEvent ievent);
 }

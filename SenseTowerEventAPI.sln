@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenseTowerEventAPI", "SenseTowerEventAPI\SenseTowerEventAPI.csproj", "{0A2BE6E5-EDA9-4487-8E3C-B09EEE6E7AEA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SC.Internship.Common", "SC.Internship.Common\SC.Internship.Common\SC.Internship.Common.csproj", "{8BD176C8-1A0F-4843-AD77-C6DE6E65C164}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0A2BE6E5-EDA9-4487-8E3C-B09EEE6E7AEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A2BE6E5-EDA9-4487-8E3C-B09EEE6E7AEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A2BE6E5-EDA9-4487-8E3C-B09EEE6E7AEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BD176C8-1A0F-4843-AD77-C6DE6E65C164}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BD176C8-1A0F-4843-AD77-C6DE6E65C164}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BD176C8-1A0F-4843-AD77-C6DE6E65C164}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD176C8-1A0F-4843-AD77-C6DE6E65C164}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,13 +1,43 @@
-﻿namespace SenseTowerEventAPI.Interfaces
+﻿using JetBrains.Annotations;
+
+namespace SenseTowerEventAPI.Interfaces;
+
+/// <summary>
+/// Интерфейс мероприятия
+/// </summary>
+[UsedImplicitly]
+public interface IEvent
 {
-    public interface IEvent
-    {
-        public Guid ID { get; set; }
-        public string Title { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public string Description { get; set; }
-        public Guid ImageID { get; set; }
-        public Guid SpaceID { get; set; }
-    }
+    /// <summary>
+    /// Уникальный идентификатор мероприятия
+    /// </summary>
+    public Guid ID { get; set; }
+    /// <summary>
+    /// Название мероприятия
+    /// </summary>
+    public string Title { get; set; }
+    /// <summary>
+    /// Дата начала меропрития
+    /// </summary>
+    public DateTime StartDate { get; set; }
+    /// <summary>
+    /// Дата завершения мероприятия
+    /// </summary>
+    public DateTime EndDate { get; set; }
+    /// <summary>
+    /// Описание мероприятия
+    /// </summary>
+    public string Description { get; set; }
+    /// <summary>
+    /// Уникальный идентификатор изображения мероприятия
+    /// </summary>
+    public Guid ImageID { get; set; }
+    /// <summary>
+    /// Уникальный идентификатор пространства мероприятия
+    /// </summary>
+    public Guid SpaceID { get; set; }
+    /// <summary>
+    /// Список билетов мероприятия
+    /// </summary>
+    public List<Models.Ticket> Tickets { get; set; }
 }

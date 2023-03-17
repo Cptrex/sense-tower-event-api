@@ -1,7 +1,6 @@
-﻿namespace SenseTowerEventAPI.Interfaces
+﻿namespace SenseTowerEventAPI.Interfaces;
+
+public interface IEntity
 {
-    public interface IEntity
-    {
-        public Guid ID { get; }
-    }
+    public Guid ID { get; }
 }

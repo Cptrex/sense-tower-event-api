@@ -1,21 +1,21 @@
-﻿using MediatR;
-using SenseTowerEventAPI.Features.Event.EventRead;
+﻿using JetBrains.Annotations;
+using MediatR;
 using SenseTowerEventAPI.Interfaces;
 
-namespace SenseTowerEventAPI.Features.Event.EventGetList
+namespace SenseTowerEventAPI.Features.Event.EventGetList;
+
+[UsedImplicitly]
+public class EventGetListQueryHandler : IRequestHandler<EventGetListQuery, List<IEvent>>
 {
-    public class EventGetListQueryHandler : IRequestHandler<EventGetListQuery, List<IEvent>>
+    private readonly IEventSingleton _eventInstance;
+
+    public EventGetListQueryHandler(IEventSingleton eventSingleton)
     {
-        private readonly IEventSingleton _eventInstance;
+        _eventInstance = eventSingleton;
+    }
 
-        public EventGetListQueryHandler(IEventSingleton eventSingleton)
-        {
-            _eventInstance = eventSingleton;
-        }
-
-        public async Task<List<IEvent>> Handle(EventGetListQuery request, CancellationToken cancellationToken)
-        {
-            return _eventInstance.Events;
-        }
+    public async Task<List<IEvent>> Handle(EventGetListQuery request, CancellationToken cancellationToken)
+    {
+        return await  Task.FromResult(_eventInstance.Events);
     }
 }
