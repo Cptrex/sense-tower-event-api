@@ -16,10 +16,10 @@ public class EventCreateCommandHandler : IRequestHandler<EventCreateCommand, Gui
 
     public async Task<Guid> Handle(EventCreateCommand request, CancellationToken cancellationToken)
     {
-        var newEvent = new Models.Event(Guid.NewGuid(), request.Title, request.StartDate, request.EndDate, request.Description, request.ImageID, request.SpaceID, request.Tickets);
+        var newEvent = new Models.Event(Guid.NewGuid(), request.Title, request.StartDate, request.EndDate, request.Description, request.ImageId, request.SpaceId, request.Tickets);
 
         _eventInstance.Events.Add(newEvent);
 
-        return await Task.FromResult(newEvent.ID);
+        return await Task.FromResult(newEvent.Id);
     }
 }

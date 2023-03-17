@@ -15,8 +15,8 @@ public class EventDeleteCommandHandler : IRequestHandler<EventDeleteCommand, Gui
     }
     public async Task<Guid> Handle(EventDeleteCommand request, CancellationToken cancellationToken)
     {
-        _eventInstance.Events.RemoveAll(e=> e.ID == request.ID);
+        _eventInstance.Events.RemoveAll(e=> e.Id == request.Id);
 
-        return await Task.FromResult(request.ID);
+        return await Task.FromResult(request.Id);
     }
 }

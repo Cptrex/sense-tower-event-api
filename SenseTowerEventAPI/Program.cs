@@ -13,8 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = "http://localhost:5000/";
-        options.Audience = "SenseTowerEventAPI";
+        options.Authority = "";
+        options.Audience = "";
         options.RequireHttpsMetadata = false;
     }
 );

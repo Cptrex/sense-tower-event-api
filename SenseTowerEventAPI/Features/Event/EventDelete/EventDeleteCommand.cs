@@ -10,5 +10,5 @@ namespace SenseTowerEventAPI.Features.Event.EventDelete;
 [SwaggerSchema("Модель обработчика команды удаления мероприятия")]
 public class EventDeleteCommand : IRequest<Guid>, IEntity
 {
-    public Guid ID { get; set; }
+    public Guid Id { get; set; }
 }

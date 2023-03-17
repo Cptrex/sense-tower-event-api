@@ -8,24 +8,29 @@ namespace SenseTowerEventAPI.Features.Ticket.GiveTicketUser;
 /// Модель команды выдачи билета пользователю на мероприятие
 /// </summary>
 [SwaggerSchema("Модель команды выдачи билета пользователю на мероприятие")]
-public class GiveTicketUserCommand : IRequest<Guid>, ITicket
+public class GiveTicketUserCommand : IRequest<Guid>, ITicket, IEntity
 {
     /// <summary>
     /// Уникальный идентификатор билета
     /// </summary>
-    public Guid ID { get; set; }
+    public Guid Id { get; set; }
+    /// <summary>
+    /// Уникальный идентификатор мероприятия 
+    /// </summary>
+    public Guid EventId { get; set; }
     /// <summary>
     /// Владелец билета
     /// </summary>
-    public string Owner { get; set; }
+    public Guid Owner { get; set; }
     /// <summary>
     /// Место мероприятия
     /// </summary>
     public string? Place { get; set; }
 
-    public GiveTicketUserCommand(Guid iD, string owner, string? place)
+    public GiveTicketUserCommand(Guid id, Guid eventId, Guid owner, string? place)
     {
-        ID = iD;
+        Id = id;
+        EventId = eventId;
         Owner = owner;
         Place = place;
     }

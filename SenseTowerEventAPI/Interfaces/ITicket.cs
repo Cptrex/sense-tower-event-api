@@ -5,7 +5,8 @@ namespace SenseTowerEventAPI.Interfaces;
 [UsedImplicitly]
 public interface ITicket
 {
-    public  Guid ID { get; set; }
-    public string Owner { get; set; }
+    public Guid Id { get; set; }
+    public Guid EventId { get; set; }
+    public Guid Owner { get; set; }
     public string? Place { get; set; }
 }

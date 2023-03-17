@@ -13,7 +13,7 @@ public class EventCreateCommand : IRequest<Guid>, IEvent
     /// <summary>
     /// Уникальный идентификатор мероприятия
     /// </summary>
-    public Guid ID { get; set; }
+    public Guid Id { get; set; }
     /// <summary>
     /// Название мероприятия
     /// </summary>
@@ -33,26 +33,26 @@ public class EventCreateCommand : IRequest<Guid>, IEvent
     /// <summary>
     /// Уникальный идентификатор изображения мероприятия
     /// </summary>
-    public Guid ImageID { get; set ; }
+    public Guid ImageId { get; set ; }
     /// <summary>
     /// Уникальный идентификатор пространства мероприятия
     /// </summary>
-    public Guid SpaceID { get; set ; }
+    public Guid SpaceId { get; set ; }
     /// <summary>
     /// Список билетов мероприятия
     /// </summary>
-    public List<Models.Ticket> Tickets { get; set; }
+    public List<ITicket> Tickets { get; set; }
 
     public EventCreateCommand(Guid id, string title, DateTime startDate, DateTime endDate,
-        string description, Guid imageId, Guid spaceId, List<Models.Ticket> tickets)
+        string description, Guid imageId, Guid spaceId, List<ITicket> tickets)
     {
-        ID = id;
+        Id = id;
         Title = title;
         StartDate = startDate;
         EndDate = endDate;
         Description = description;
-        ImageID = imageId;
-        SpaceID = spaceId;
+        ImageId = imageId;
+        SpaceId = spaceId;
         Tickets = tickets;
     }
 }

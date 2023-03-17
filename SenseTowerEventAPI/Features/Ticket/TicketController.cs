@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SC.Internship.Common.ScResult;
+using SenseTowerEventAPI.Features.Ticket.AddFreeTicket;
+using SenseTowerEventAPI.Features.Ticket.CheckTicketUserExist;
 using SenseTowerEventAPI.Features.Ticket.GiveTicketUser;
 
 namespace SenseTowerEventAPI.Features.Ticket;
@@ -25,11 +27,11 @@ public class TicketController : ControllerBase
     /// <returns></returns>
     [HttpPost]
     [Route("give-free-ticket")]
-    public async Task<ScResult> GiveFreeTicketUser(GiveTicketUserCommand cmd)
+    public async Task<ScResult<Guid>> GiveFreeTicketUser(GiveTicketUserCommand cmd)
     {
-        await _mediator.Send(cmd);
+        var result = await _mediator.Send(cmd);
 
-        return new ScResult();
+        return new ScResult<Guid>(result);
     }
 
     /// <summary>
@@ -38,8 +40,24 @@ public class TicketController : ControllerBase
     /// <returns></returns>
     [HttpGet]
     [Route("check-ticket-exist")]
-    public async Task<ScResult> CheckUserTicketExist()
+    public async Task<ScResult<bool>> CheckUserTicketExist(CheckTicketUserExistQuery cmd)
     {
-        return await Task.FromResult(new ScResult());
+        var searchResult = await _mediator.Send(cmd);
+        
+        return await Task.FromResult(new ScResult<bool>(searchResult));
+    }
+
+    /// <summary>
+    /// Добавить беслпатный билет на мероприятие
+    /// </summary>
+    /// <param name="cmd"></param>
+    /// <returns></returns>
+    [HttpPut]
+    [Route("add-free-ticket")]
+    public async Task<ScResult<Guid>> AddFreeTicketEvent(AddFreeTicketCommand cmd)
+    {
+        var result = await _mediator.Send(cmd);
+
+        return await Task.FromResult(new ScResult<Guid>(result));
     }
 }

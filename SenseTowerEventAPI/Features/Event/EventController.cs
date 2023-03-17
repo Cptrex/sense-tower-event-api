@@ -48,7 +48,7 @@ public class EventController : ControllerBase
     [HttpDelete("delete/{eventId:guid}")]
     public async Task<ScResult> DeleteEvent([FromRoute] Guid eventId)
     {
-        var cmd = new EventDeleteCommand { ID = eventId };
+        var cmd = new EventDeleteCommand { Id = eventId };
         await _mediator.Send(cmd);
 
         return new ScResult();

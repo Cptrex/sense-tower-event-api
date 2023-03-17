@@ -31,8 +31,8 @@ public class EventValidator : AbstractValidator<IEvent>
         // RuleFor(e => e.Title).NotNull().MinimumLength(2).MaximumLength(5);
         //RuleFor(e => e.Description).NotNull().MaximumLength(1);
 
-        RuleFor(e => e.ImageID).NotNull().Must(IsImageIdExist).WithMessage("Такого изображения не существует");
-        RuleFor(e => e.SpaceID).NotNull().Must(IsSpaceIdExist).WithMessage("Такого пространства не существует");
+        RuleFor(e => e.ImageId).NotNull().Must(IsImageIdExist).WithMessage("Такого изображения не существует");
+        RuleFor(e => e.SpaceId).NotNull().Must(IsSpaceIdExist).WithMessage("Такого пространства не существует");
     }
 
     public bool IsImageIdExist(Guid imageId)
