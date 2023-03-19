@@ -1371,19 +1371,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\CptRex\\.nuget\\packages\\": {}
+    "C:\\Users\\riddle\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\VS Repos\\SENSE TOWER\\sense-tower-event-api\\SenseTowerEventAPI\\SenseTowerEventAPI.csproj",
+      "projectUniqueName": "E:\\VS Repos\\SENSE TOWER\\SenseTowerEventAPI\\SenseTowerEventAPI\\SenseTowerEventAPI.csproj",
       "projectName": "SenseTowerEventAPI",
-      "projectPath": "C:\\VS Repos\\SENSE TOWER\\sense-tower-event-api\\SenseTowerEventAPI\\SenseTowerEventAPI.csproj",
-      "packagesPath": "C:\\Users\\CptRex\\.nuget\\packages\\",
-      "outputPath": "C:\\VS Repos\\SENSE TOWER\\sense-tower-event-api\\SenseTowerEventAPI\\obj\\",
+      "projectPath": "E:\\VS Repos\\SENSE TOWER\\SenseTowerEventAPI\\SenseTowerEventAPI\\SenseTowerEventAPI.csproj",
+      "packagesPath": "C:\\Users\\riddle\\.nuget\\packages\\",
+      "outputPath": "E:\\VS Repos\\SENSE TOWER\\SenseTowerEventAPI\\SenseTowerEventAPI\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\CptRex\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\riddle\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1397,8 +1402,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\VS Repos\\SENSE TOWER\\sense-tower-event-api\\SC.Internship.Common\\SC.Internship.Common\\SC.Internship.Common.csproj": {
-              "projectPath": "C:\\VS Repos\\SENSE TOWER\\sense-tower-event-api\\SC.Internship.Common\\SC.Internship.Common\\SC.Internship.Common.csproj"
+            "E:\\VS Repos\\SENSE TOWER\\SenseTowerEventAPI\\SC.Internship.Common\\SC.Internship.Common\\SC.Internship.Common.csproj": {
+              "projectPath": "E:\\VS Repos\\SENSE TOWER\\SenseTowerEventAPI\\SC.Internship.Common\\SC.Internship.Common\\SC.Internship.Common.csproj"
             }
           }
         }
@@ -1469,7 +1474,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

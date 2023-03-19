@@ -80,18 +80,37 @@ app.UseCors(b =>
     b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
 });
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    IdentityModelEventSource.ShowPII = true;
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
+IdentityModelEventSource.ShowPII = true;
+app.UseSwagger();
+app.UseSwaggerUI();
+
+/*
+ * // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        IdentityModelEventSource.ShowPII = true;
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+*/
+app.UseHsts();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseRouting();
+
+app.Use(async (context, next) =>
+{
+    var swaggerPath = "/swagger";
+    if ((string)context.Request.Path != swaggerPath)
+    {
+        context.Response.Redirect(swaggerPath);
+        return;
+    }
+    await next();
+});
 
 app.MapControllers();
 
