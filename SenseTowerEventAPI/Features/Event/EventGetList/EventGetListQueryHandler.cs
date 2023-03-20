@@ -1,21 +1,26 @@
 ﻿using JetBrains.Annotations;
 using MediatR;
-using SenseTowerEventAPI.Interfaces;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+using SenseTowerEventAPI.Models.Context;
 
 namespace SenseTowerEventAPI.Features.Event.EventGetList;
 
 [UsedImplicitly]
-public class EventGetListQueryHandler : IRequestHandler<EventGetListQuery, List<IEvent>>
+public class EventGetListQueryHandler : IRequestHandler<EventGetListQuery, List<Models.Event>>
 {
-    private readonly IEventSingleton _eventInstance;
+    private readonly IMongoCollection<Models.Event> _eventContext;
 
-    public EventGetListQueryHandler(IEventSingleton eventSingleton)
+    public EventGetListQueryHandler(IOptions<EventContext> options)
     {
-        _eventInstance = eventSingleton;
+        var mongoClient = new MongoClient(options.Value.ConnectionString);
+
+        _eventContext = mongoClient.GetDatabase(options.Value.DatabaseName)
+            .GetCollection<Models.Event>(options.Value.CollectionName);
     }
 
-    public async Task<List<IEvent>> Handle(EventGetListQuery request, CancellationToken cancellationToken)
+    public async Task<List<Models.Event>> Handle(EventGetListQuery request, CancellationToken cancellationToken)
     {
-        return await  Task.FromResult(_eventInstance.Events);
+        return await _eventContext.Find(_ => true).ToListAsync(cancellationToken: cancellationToken);
     }
 }

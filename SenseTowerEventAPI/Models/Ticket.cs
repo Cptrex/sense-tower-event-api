@@ -1,5 +1,7 @@
-﻿using SenseTowerEventAPI.Interfaces;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using SenseTowerEventAPI.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
+using MongoDB.Bson;
 
 namespace SenseTowerEventAPI.Models;
 
@@ -12,25 +14,36 @@ public class Ticket : ITicket, IEntity
     /// <summary>
     /// Уникальный идентификатор билета
     /// </summary>
+    [BsonId]
+    [BsonRepresentation(BsonType.String)]
     public Guid Id { get; set; }
+
     /// <summary>
     /// Уникальный идентификатор мероприятия
     /// </summary>
+    [BsonRepresentation(BsonType.String)]
+    [BsonElement("elementId")]
     public Guid EventId { get; set; }
+
     /// <summary>
     /// Владелец билета
     /// </summary>
+    [BsonRepresentation(BsonType.String)]
+    [BsonElement("owner")]
     public Guid Owner { get; set; }
-    /// <summary>
-    /// Место мероприятия
-    /// </summary>
-    public string? Place { get; set; }
 
-    public Ticket(Guid id, Guid eventId, Guid owner, string? place)
+    /// <summary>
+    /// Номер места на мероприятии
+    /// </summary>
+    [BsonRepresentation(BsonType.Int32)]
+    [BsonElement("placeNumber")]
+    public int PlaceNumber { get; set; }
+
+    public Ticket(Guid id, Guid eventId, Guid owner, int placeNumber)
     {
         Id = id;
         EventId = eventId;
         Owner = owner;
-        Place = place;
+        PlaceNumber = placeNumber;
     }
 }

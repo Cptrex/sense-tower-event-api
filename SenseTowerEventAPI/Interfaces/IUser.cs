@@ -1,5 +1,8 @@
-﻿namespace SenseTowerEventAPI.Interfaces
+﻿using JetBrains.Annotations;
+
+namespace SenseTowerEventAPI.Interfaces
 {
+    [UsedImplicitly]
     public interface IUser
     {
         public Guid Id { get; set; }

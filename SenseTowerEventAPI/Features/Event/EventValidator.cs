@@ -5,45 +5,28 @@ namespace SenseTowerEventAPI.Features.Event;
 
 public class EventValidator : AbstractValidator<IEvent>
 {
-
-    private readonly IEventSingleton _eventInstance;
-        
-    public EventValidator(IEventSingleton eventSingleton) 
+    public EventValidator(IEventSingleton _eventInstance, IEventValidatorRepository _eventValidatorRepository)
     {
-        _eventInstance = eventSingleton;
-
         RuleFor(e => e.EndDate)
             .NotNull().NotEmpty().WithMessage("EndDate не может быть пустым");
 
-        RuleFor(e=> e.StartDate)
+        RuleFor(e => e.StartDate)
             .NotNull().NotEmpty().WithMessage("StartDate не может быть пустым")
             .LessThan(d => d.EndDate).WithMessage("StartDate не может быть больше, чем EndDate");
 
         RuleFor(e => e.Title).NotNull();
         RuleFor(e => e.Title).MinimumLength(2);
         RuleFor(e => e.Title).MaximumLength(5);
-        RuleFor(e => e.Title).Must(e=> e.Contains("t")).WithMessage("Заголовок должен содержать t");
+        RuleFor(e => e.Title).Must(e => e.Contains("t")).WithMessage("Заголовок должен содержать s");
 
         RuleFor(e => e.Description).NotNull();
         RuleFor(e => e.Description).MinimumLength(2);
         RuleFor(e => e.Description).MaximumLength(5);
-        RuleFor(e => e.Description).Must(e => e.Contains("d")).WithMessage("Описание должно содержать d");
-        // RuleFor(e => e.Title).NotNull().MinimumLength(2).MaximumLength(5);
-        //RuleFor(e => e.Description).NotNull().MaximumLength(1);
+        RuleFor(e => e.Description).Must(e => e.Contains("d")).WithMessage("Описание должно содержать s");
 
-        RuleFor(e => e.ImageId).NotNull().Must(IsImageIdExist).WithMessage("Такого изображения не существует");
-        RuleFor(e => e.SpaceId).NotNull().Must(IsSpaceIdExist).WithMessage("Такого пространства не существует");
-    }
 
-    public bool IsImageIdExist(Guid imageId)
-    {
-
-        return _eventInstance.Images.Contains(imageId);
-    }
-
-    public bool IsSpaceIdExist(Guid spaceId)
-    {
-        return _eventInstance.Spaces.Contains(spaceId);
+        RuleFor(e => e.ImageId).NotNull().Must(e => _eventValidatorRepository.IsImageIdExist(_eventInstance, e)).WithMessage("Такого изображения не существует");
+        RuleFor(e => e.SpaceId).NotNull().Must(e => _eventValidatorRepository.IsSpaceIdExist(_eventInstance, e)).WithMessage("Такого пространства не существует");
 
     }
 }

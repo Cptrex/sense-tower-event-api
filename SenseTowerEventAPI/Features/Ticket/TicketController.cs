@@ -9,7 +9,7 @@ using SenseTowerEventAPI.Features.Ticket.GiveTicketUser;
 namespace SenseTowerEventAPI.Features.Ticket;
 
 [ApiController]
-[AllowAnonymous]
+[Authorize]
 [Route("[controller]")]
 public class TicketController : ControllerBase
 {
