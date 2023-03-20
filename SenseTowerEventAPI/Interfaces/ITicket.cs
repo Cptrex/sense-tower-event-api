@@ -8,5 +8,5 @@ public interface ITicket
     public Guid Id { get; set; }
     public Guid EventId { get; set; }
     public Guid Owner { get; set; }
-    public string? Place { get; set; }
+    public int PlaceNumber { get; set; }
 }

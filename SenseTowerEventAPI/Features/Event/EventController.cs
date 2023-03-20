@@ -12,7 +12,7 @@ using SenseTowerEventAPI.Interfaces;
 namespace SenseTowerEventAPI.Features.Event;
 
 [ApiController]
-[AllowAnonymous]
+[Authorize]
 [Route("[controller]")]
 public class EventController : ControllerBase
 {

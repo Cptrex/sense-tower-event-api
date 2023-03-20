@@ -13,10 +13,10 @@ public class EventListViewModel : IEvent, IEntity
     public string Description { get; set; }
     public Guid ImageId { get; set; }
     public Guid SpaceId { get; set; }
-    public List<ITicket> Tickets { get; set; }
+    public List<Models.Ticket> Tickets { get; set; }
 
     public EventListViewModel(Guid id, string title, DateTime startDate, DateTime endDate,
-        string description, Guid imageId, Guid spaceId, List<ITicket> tickets)
+        string description, Guid imageId, Guid spaceId, List<Models.Ticket> tickets)
     {
         Id = id;
         Title = title;

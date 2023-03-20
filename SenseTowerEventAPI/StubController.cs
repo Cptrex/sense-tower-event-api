@@ -6,6 +6,7 @@ namespace SenseTowerEventAPI;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 // ReSharper disable once InconsistentNaming. Решарпер показывает излишнюю рекомендацию
 public class StubController : ControllerBase
 {
@@ -14,7 +15,6 @@ public class StubController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    [Authorize]
     [Route("authstub")]
     public async Task<ScResult> AuthStub()
     {

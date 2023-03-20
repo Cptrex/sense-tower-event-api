@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using SenseTowerEventAPI.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -13,6 +15,8 @@ public class EventCreateCommand : IRequest<Guid>, IEvent
     /// <summary>
     /// Уникальный идентификатор мероприятия
     /// </summary>
+    [BsonId]
+    [BsonRepresentation(BsonType.String)]
     public Guid Id { get; set; }
     /// <summary>
     /// Название мероприятия
@@ -38,13 +42,14 @@ public class EventCreateCommand : IRequest<Guid>, IEvent
     /// Уникальный идентификатор пространства мероприятия
     /// </summary>
     public Guid SpaceId { get; set ; }
+
     /// <summary>
     /// Список билетов мероприятия
     /// </summary>
-    public List<ITicket> Tickets { get; set; }
+    public List<Models.Ticket> Tickets { get; set; }
 
     public EventCreateCommand(Guid id, string title, DateTime startDate, DateTime endDate,
-        string description, Guid imageId, Guid spaceId, List<ITicket> tickets)
+        string description, Guid imageId, Guid spaceId, List<Models.Ticket> tickets)
     {
         Id = id;
         Title = title;

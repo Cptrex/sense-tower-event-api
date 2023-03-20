@@ -1,23 +1,25 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.OpenApi.Models;
 using SenseTowerEventAPI.Features.Event;
 using SenseTowerEventAPI.Interfaces;
+using SenseTowerEventAPI.Models.Context;
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
-using Microsoft.IdentityModel.Logging;
 using SenseTowerEventAPI.Models;
+using SenseTowerEventAPI.Repository.EventRepository;
+using SenseTowerEventAPI.Repository.TicketRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.Authority = "";
-        options.Audience = "";
-        options.RequireHttpsMetadata = false;
-    }
-);
+.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+{
+    options.Authority = builder.Configuration["IdentityServer4Settings:Authority"];
+    options.Audience = builder.Configuration["IdentityServer4Settings:Audience"];
+    options.RequireHttpsMetadata = false;
+});
 
 // Add services to the container.
 #pragma warning disable CS0618
@@ -66,52 +68,38 @@ builder.Services.AddSwaggerGen(swagger =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     swagger.IncludeXmlComments(xmlPath);
 });
+builder.Services.Configure<EventContext>(builder.Configuration.GetSection("EventsDatabaseSettings"));
 
 builder.Services.AddValidatorsFromAssemblyContaining<EventValidatorBehavior>();
 builder.Services.AddScoped<IEventValidatorBehavior, EventValidatorBehavior>();
 builder.Services.AddSingleton<IEventSingleton, EventSingleton>();
+builder.Services.AddSingleton<IEventValidatorRepository, EventValidatorRepository>();
+builder.Services.AddSingleton<ITicketRepository, TicketRepository>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 var app = builder.Build();
+
 
 app.UseCors(b =>
 {
     b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
 });
 
-
 IdentityModelEventSource.ShowPII = true;
 app.UseSwagger();
 app.UseSwaggerUI();
 
-/*
- * // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        IdentityModelEventSource.ShowPII = true;
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
-*/
 app.UseHsts();
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-app.UseAuthorization();
 app.UseRouting();
 
-app.Use(async (context, next) =>
-{
-    var swaggerPath = "/swagger";
-    if ((string)context.Request.Path != swaggerPath)
-    {
-        context.Response.Redirect(swaggerPath);
-        return;
-    }
-    await next();
-});
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+

@@ -4,25 +4,7 @@ namespace SenseTowerEventAPI.Models;
 
 public class EventSingleton : IEventSingleton
 {
-    public List<IEvent> Events { get; set; } = new()
-    {
-        new Event(new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"), 
-            "Sense Tower Event", 
-            DateTime.Now, 
-            DateTime.Now.AddDays(2), 
-            "sense tower event", 
-            new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"), 
-            new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
-            new List<ITicket>() 
-            { 
-                new Ticket(
-                new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
-                new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
-                new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
-                "Sense Tower")
-
-            })
-    };
+   
     public List<Guid> Spaces { get; set; } = new()
     {
         new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6")
@@ -42,7 +24,7 @@ public class EventSingleton : IEventSingleton
                 new Ticket(new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"), 
                     new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
                     new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"), 
-                    "Sense Tower")
+                    0)
             })
     };
 }

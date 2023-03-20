@@ -25,13 +25,13 @@ public class GiveTicketUserCommand : IRequest<Guid>, ITicket, IEntity
     /// <summary>
     /// Место мероприятия
     /// </summary>
-    public string? Place { get; set; }
+    public int PlaceNumber { get; set; }
 
-    public GiveTicketUserCommand(Guid id, Guid eventId, Guid owner, string? place)
+    public GiveTicketUserCommand(Guid id, Guid eventId, Guid owner, int placeNumber)
     {
         Id = id;
         EventId = eventId;
         Owner = owner;
-        Place = place;
+        PlaceNumber = placeNumber;
     }
 }

@@ -41,10 +41,10 @@ public class EventUpdateCommand : IRequest<Guid>, IEvent, IEntity
     /// <summary>
     /// Список билетов мероприятия
     /// </summary>
-    public List<ITicket> Tickets { get; set; }
+    public List<Models.Ticket> Tickets { get; set; }
 
     public EventUpdateCommand(Guid id, string title, DateTime startDate, DateTime endDate,
-        string description, Guid imageId, Guid spaceId, List<ITicket> tickets)
+        string description, Guid imageId, Guid spaceId, List<Models.Ticket> tickets)
     {
         Id = id;
         Title = title;

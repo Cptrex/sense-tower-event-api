@@ -39,5 +39,5 @@ public interface IEvent
     /// <summary>
     /// Список билетов мероприятия
     /// </summary>
-    public List<ITicket> Tickets { get; set; }
+    public List<Models.Ticket> Tickets { get; set; }
 }
