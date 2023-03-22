@@ -63,3 +63,17 @@ $ docker build . -t имя_образа
 ```
 EventsDatabaseSettings - настройки подключения к базе данных MongoDB.
 IdentityServer4Settings - настройки подключения к Identity Server 4.
+
+### Получение токена авторизации jwt
+```
+POST: http://localhost:{{port}}/connect/token
+
+type : x-www-form-urlencoded
+
+body {
+    grant_type = "client_credentials",
+    scope = "myApi.read",
+    client_id = "sensetower-event-api",
+    client_secret = "sensetowereventapi"
+}
+```
