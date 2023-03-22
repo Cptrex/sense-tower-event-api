@@ -1,28 +1,30 @@
 # Sense Tower Event API
 
-#### Требования к использованию
+### Требования к использованию
 1. Docker
 2. Visual Studio 2022
 3. Mongo DB ( присутствует вариант использования MongoDB в docker контейнере)
+4. Identity Server 4 https://github.com/Cptrex/identity-server-4
 _____
 
-#### Установка
+### Установка
 1. Клонируем репозиторий 
 ```
 git clone https://github.com/Cptrex/sense-tower-event-api.git
 ```
-2. Переходим в папку **/SenseTowerEventAPI/IdentityServer4/** и выполняем команду:
+2. Скачиваем официальный образ Mongo DB командой:
 ```
-$ docker-compose up
+$ docker pull mongo
+```
+3. Скачиваем образ Identity Server 4:
+github: https://github.com/Cptrex/identity-server-4
+docker hub: https://hub.docker.com/r/cptrex/identity-server-4
+```
+$ docker pull cptrex/identity-server-4
 ```
 
-+ При помощи данной команды произойдет установка:
-    + Identity Server 4
-    + Mongo DB
-https://github.com/markglibres/identityserver4-mongodb-redis - репозиторий образа IS4
-https://hub.docker.com/r/bizzpo/identityserver4 - docker hub образа
 Identity Server 4 необходим для аутентификации запросов к API
-Mongo DB используется как основая база данных API. 
+Mongo DB используется как основная база данных API. 
 _____
 
 ##### Dockerfile
@@ -32,22 +34,22 @@ _____
 $ docker build . -t имя_образа
 ```
 
-##### Конфигурация
+#### Конфигурация
 
 **appsetings.json**
 ```
 {
   "EventsDatabaseSettings": {
-    "ConnectionString": "mongodb://root:foobar@mongodb:27017/?readPreference=primaryPreferred&appname=identityserver",
+    "ConnectionString": "mongodb://localhost:7000/",
     "DatabaseName": "STEventsApiDB",
     "CollectionName": "Events"
   },
   "IdentityServer4Settings": {
-    "AuthorityUrl": "http://localhost:5000",
-    "Audience":  "myapi",
-    "ClientId": "spaWeb",
-    "ClientSecret": "hardtoguess",
-    "Scopes": [ "myapi.access", "openid", "offline_access" ]
+    "Authority": "http://localhost:5001",
+    "ApiName": "myApi",
+    "Audience": "myApi",
+    "ClientId": "sensetower-event-api",
+    "ClientSecret": "sensetowereventapi"
   },
   "Logging": {
     "LogLevel": {

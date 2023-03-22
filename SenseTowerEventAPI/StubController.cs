@@ -16,8 +16,8 @@ public class StubController : ControllerBase
     /// <returns></returns>
     [HttpGet]
     [Route("authstub")]
-    public async Task<ScResult> AuthStub()
+    public async Task<ScResult<IActionResult>> AuthStub()
     {
-        return await Task.FromResult(new ScResult());
+        return await Task.FromResult(new ScResult<IActionResult>(Ok("Ok")));
     }
 }
