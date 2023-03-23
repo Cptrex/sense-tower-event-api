@@ -57,7 +57,6 @@ $ docker build . -t имя_образа
       "Microsoft.AspNetCore": "Warning"
     }
   },
-  "https_port": 443,
   "AllowedHosts": "*"
 }
 ```

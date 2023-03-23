@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
 using SenseTowerEventAPI.Interfaces;
+#pragma warning disable CA1847
 
 namespace SenseTowerEventAPI.Features.Event;
 
-public class EventValidator : AbstractValidator<IEvent>
+public class EventValidator : AbstractValidator<Models.Event>
 {
     public EventValidator(IEventSingleton _eventInstance, IEventValidatorRepository _eventValidatorRepository)
     {
