@@ -1,12 +1,13 @@
 ﻿using JetBrains.Annotations;
 
-namespace SenseTowerEventAPI.Interfaces
+namespace SenseTowerEventAPI.Interfaces;
+
+public interface IEventContext
 {
     [UsedImplicitly]
-    public interface IEventContext
-    {
-        public string ConnectionString { get; set; }
-        public string DatabaseName { get; set; }
-        public string CollectionName { get; set; }
-    }
+    public string ConnectionString { get; set; }
+    [UsedImplicitly]
+    public string DatabaseName { get; set; }
+    [UsedImplicitly]
+    public string CollectionName { get; set; }
 }

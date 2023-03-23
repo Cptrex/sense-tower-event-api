@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using SenseTowerEventAPI.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace SenseTowerEventAPI.Features.Event.EventCreate;
@@ -10,7 +9,7 @@ namespace SenseTowerEventAPI.Features.Event.EventCreate;
 /// Модель команды создания мероприятия
 /// </summary>
 [SwaggerSchema("Модель команды создания мероприятия")]
-public class EventCreateCommand : IRequest<Guid>, IEvent
+public class EventCreateCommand : IRequest<Guid>
 {
     /// <summary>
     /// Уникальный идентификатор мероприятия

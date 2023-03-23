@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using SenseTowerEventAPI.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace SenseTowerEventAPI.Features.Ticket.GiveTicketUser;
@@ -8,7 +7,7 @@ namespace SenseTowerEventAPI.Features.Ticket.GiveTicketUser;
 /// Модель команды выдачи билета пользователю на мероприятие
 /// </summary>
 [SwaggerSchema("Модель команды выдачи билета пользователю на мероприятие")]
-public class GiveTicketUserCommand : IRequest<Guid>, ITicket, IEntity
+public class GiveTicketUserCommand : IRequest<Guid>
 {
     /// <summary>
     /// Уникальный идентификатор билета

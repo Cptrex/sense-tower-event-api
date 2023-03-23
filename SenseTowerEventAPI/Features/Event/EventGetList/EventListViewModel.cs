@@ -1,10 +1,9 @@
 ﻿using JetBrains.Annotations;
-using SenseTowerEventAPI.Interfaces;
 
 namespace SenseTowerEventAPI.Features.Event.EventGetList;
 
 [UsedImplicitly]
-public class EventListViewModel : IEvent, IEntity
+public class EventListViewModel
 {
     public Guid Id { get; set; }
     public string Title { get; set; }

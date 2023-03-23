@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using SenseTowerEventAPI.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace SenseTowerEventAPI.Features.Event.EventUpdate;
@@ -8,7 +7,7 @@ namespace SenseTowerEventAPI.Features.Event.EventUpdate;
 /// Модель команды обновления мероприятия
 /// </summary>
 [SwaggerSchema("Модель команды обновления мероприятия")]
-public class EventUpdateCommand : IRequest<Guid>, IEvent, IEntity
+public class EventUpdateCommand : IRequest<Guid>
 {
     /// <summary>
     /// Уникальный идентификатор мероприятия

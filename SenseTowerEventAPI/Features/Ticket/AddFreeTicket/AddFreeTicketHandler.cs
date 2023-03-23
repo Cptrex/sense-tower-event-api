@@ -28,7 +28,7 @@ public class AddFreeTicketHandler :IRequestHandler<AddFreeTicketCommand, Guid>
         
         if (foundEvent == null) throw new StException("Ошибка добавления билета. Мероприятие не найдено");
 
-        int ticketLastNumber = await _ticketRepository.GetLastTicketNumberInEvent(foundEvent.Id);
+        var ticketLastNumber = await _ticketRepository.GetLastTicketNumberInEvent(foundEvent.Id);
         
         var ticket = new Models.Ticket(Guid.NewGuid(),foundEvent.Id, request.Owner, ticketLastNumber + 1);
         

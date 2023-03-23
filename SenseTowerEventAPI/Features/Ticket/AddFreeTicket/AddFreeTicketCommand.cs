@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using MediatR;
-using SenseTowerEventAPI.Interfaces;
 
 namespace SenseTowerEventAPI.Features.Ticket.AddFreeTicket;
 
@@ -8,7 +7,7 @@ namespace SenseTowerEventAPI.Features.Ticket.AddFreeTicket;
 /// Модель команды добавления бесплатного билета
 /// </summary>
 [UsedImplicitly]
-public class AddFreeTicketCommand : IRequest<Guid>, ITicket, IEntity
+public class AddFreeTicketCommand : IRequest<Guid>
 {
     public Guid Id { get; set; }
     public Guid EventId { get; set; }

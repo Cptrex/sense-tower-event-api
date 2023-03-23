@@ -6,13 +6,13 @@ namespace SenseTowerEventAPI.Features.Event;
 
 public class EventValidatorBehavior : IEventValidatorBehavior
 {
-    private readonly IValidator<IEvent> _validator;
+    private readonly IValidator<Models.Event> _validator;
 
-    public EventValidatorBehavior(IValidator<IEvent> validator)
+    public EventValidatorBehavior(IValidator<Models.Event> validator)
     {
         _validator = validator;
     }
-    public ValidationResult Validate(IEvent eventData)
+    public ValidationResult Validate(Models.Event eventData)
     { 
         var validationResult = _validator.Validate(eventData);
 

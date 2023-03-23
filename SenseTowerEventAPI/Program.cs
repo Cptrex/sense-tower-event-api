@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SenseTowerEventAPI.Models;
 using SenseTowerEventAPI.Repository.EventRepository;
 using SenseTowerEventAPI.Repository.TicketRepository;
+#pragma warning disable CS0618
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,20 +18,17 @@ builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
+    }).AddJwtBearer(options =>
     {
         options.Authority = builder.Configuration["IdentityServer4Settings:Authority"];
         options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters.ValidAudiences = new List<string>() { builder.Configuration["IdentityServer4Settings:Audience"] };
+        options.TokenValidationParameters.ValidAudiences = new List<string?> { builder.Configuration["IdentityServer4Settings:Audience"] };
     });
 
 builder.Services.AddAuthorization();
 
 // Add services to the container.
-#pragma warning disable CS0618
 builder.Services.AddControllers().AddFluentValidation(f => f.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
-#pragma warning restore CS0618
 
 builder.Services.AddValidatorsFromAssemblyContaining<EventValidator>();
 
@@ -38,14 +36,14 @@ builder.Services.AddValidatorsFromAssemblyContaining<EventValidator>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(swagger =>
 {
-    swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    swagger.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
         Description = "¬ведите верный токен",
         Name = "Authorization",
         Type = SecuritySchemeType.Http,
         BearerFormat = "JWT",
-        Scheme = "Bearer"
+        Scheme = JwtBearerDefaults.AuthenticationScheme
     });
 
     swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -56,7 +54,7 @@ builder.Services.AddSwaggerGen(swagger =>
                 Reference = new OpenApiReference
                 {
                     Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
+                    Id=JwtBearerDefaults.AuthenticationScheme
                 }
             },
             Array.Empty<string>()
@@ -74,6 +72,8 @@ builder.Services.AddSwaggerGen(swagger =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     swagger.IncludeXmlComments(xmlPath);
 });
+
+ModelMapper.InitRegisterMap();
 builder.Services.Configure<EventContext>(builder.Configuration.GetSection("EventsDatabaseSettings"));
 
 builder.Services.AddValidatorsFromAssemblyContaining<EventValidatorBehavior>();
@@ -86,7 +86,6 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Progr
 
 var app = builder.Build();
 
-
 app.UseCors(b =>
 {
     b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
@@ -97,7 +96,6 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHsts();
-app.UseHttpsRedirection();
 
 app.UseRouting();
 
@@ -107,5 +105,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-

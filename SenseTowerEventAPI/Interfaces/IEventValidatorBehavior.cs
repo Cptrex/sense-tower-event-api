@@ -4,5 +4,5 @@ namespace SenseTowerEventAPI.Interfaces;
 
 public interface IEventValidatorBehavior
 {
-    ValidationResult Validate(IEvent ievent);
+    ValidationResult Validate(Models.Event eventData);
 }
