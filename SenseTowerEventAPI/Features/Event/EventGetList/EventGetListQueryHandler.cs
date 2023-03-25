@@ -21,6 +21,6 @@ public class EventGetListQueryHandler : IRequestHandler<EventGetListQuery, List<
 
     public async Task<List<Models.Event>> Handle(EventGetListQuery request, CancellationToken cancellationToken)
     {
-        return await _eventContext.Find(_ => true).ToListAsync(cancellationToken: cancellationToken);
+        return await _eventContext.Find(_ => true).ToListAsync(cancellationToken);
     }
 }

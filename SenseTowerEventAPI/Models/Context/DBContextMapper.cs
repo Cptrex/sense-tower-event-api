@@ -1,8 +1,8 @@
 ﻿using MongoDB.Bson.Serialization;
 
-namespace SenseTowerEventAPI.Models;
+namespace SenseTowerEventAPI.Models.Context;
 
-public class ModelMapper
+public class DBContextMapper
 {
     public static void InitRegisterMap()
     {

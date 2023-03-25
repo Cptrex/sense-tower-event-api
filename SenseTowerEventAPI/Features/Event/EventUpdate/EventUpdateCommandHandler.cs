@@ -20,9 +20,9 @@ public class EventUpdateCommandHandler : IRequestHandler<EventUpdateCommand, Gui
 
     public async Task<Guid> Handle(EventUpdateCommand request, CancellationToken cancellationToken)
     {
-        var selectedEvent = (await _eventContext.Find(e => e.Id == request.Id).ToListAsync(cancellationToken: cancellationToken)).First();
+        var selectedEvent = (await _eventContext.Find(e => e.Id == request.Id).ToListAsync(cancellationToken)).First();
 
-        selectedEvent.UpdateEvent(request.StartDate, request.EndDate, request.Title, request.Description, request.ImageId, request.SpaceId, request.Tickets);
+        selectedEvent.UpdateEvent(request);
 
         await _eventContext.ReplaceOneAsync(e=>e.Id == selectedEvent.Id, selectedEvent, cancellationToken: cancellationToken);
 
