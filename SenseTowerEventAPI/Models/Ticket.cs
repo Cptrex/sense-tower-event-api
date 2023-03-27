@@ -34,11 +34,18 @@ public class Ticket
     [BsonRepresentation(BsonType.Int32)]
     public int PlaceNumber { get; set; }
 
-    public Ticket(Guid id, Guid eventId, Guid owner, int placeNumber)
+    /// <summary>
+    /// Цена билета
+    /// </summary>
+    [BsonRepresentation(BsonType.Decimal128)]
+    public decimal Price { get; set; }
+
+    public Ticket(Guid id, Guid eventId, Guid owner, int placeNumber, decimal price)
     {
         Id = id;
         EventId = eventId;
         Owner = owner;
         PlaceNumber = placeNumber;
+        Price  = price;
     }
 }

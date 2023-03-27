@@ -1,6 +1,8 @@
-﻿using MongoDB.Bson;
+﻿using System.Diagnostics.CodeAnalysis;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using SenseTowerEventAPI.Features.Event.EventCreate;
+using SenseTowerEventAPI.Features.Event.EventUpdate;
 #pragma warning disable CS8618
 
 namespace SenseTowerEventAPI.Models;
@@ -17,29 +19,18 @@ public class Event
     public Guid SpaceId { get; set; }
     public List<Ticket> Tickets { get; set; }
 
+    [SuppressMessage("ReSharper", "EmptyConstructor")]
     public  Event() {}
 
-    public Event(Guid id, string title, DateTime startDate, DateTime endDate, string description, Guid imageId, Guid spaceId, List<Ticket> tickets)
+    public void UpdateEvent(EventUpdateCommand request)
     {
-        Id = id;
-        Title = title;
-        StartDate = startDate;
-        EndDate = endDate;
-        Description = description;
-        ImageId = imageId;
-        SpaceId = spaceId;
-        Tickets = tickets;
-    }
-
-    public void UpdateEvent(DateTime startDate, DateTime endDate, string title, string description, Guid imageId, Guid spaceId, List<Ticket> tickets)
-    {
-        Title = title;
-        StartDate = startDate;
-        EndDate = endDate;
-        Description = description;
-        ImageId = imageId;
-        SpaceId = spaceId;
-        Tickets = tickets;
+        Title = request.Title;
+        StartDate = request.StartDate;
+        EndDate = request.EndDate;
+        Description = request.Description;
+        ImageId = request.ImageId;
+        SpaceId = request.SpaceId;
+        Tickets = request.Tickets;
     }
 
     public void InitEventCreateCommand(EventCreateCommand cmd)

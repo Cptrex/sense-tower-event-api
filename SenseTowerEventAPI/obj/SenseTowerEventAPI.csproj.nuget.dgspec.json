@@ -113,6 +113,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
             "FluentValidation": {
               "target": "Package",
               "version": "[11.5.1, )"
@@ -161,6 +165,10 @@
               "target": "Package",
               "version": "[7.0.1, )"
             },
+            "Microsoft.IO.RecyclableMemoryStream": {
+              "target": "Package",
+              "version": "[2.3.2, )"
+            },
             "MongoDB.Driver": {
               "target": "Package",
               "version": "[2.19.0, )"
@@ -171,7 +179,15 @@
             },
             "OpenIddict.AspNetCore": {
               "target": "Package",
-              "version": "[4.1.0, )"
+              "version": "[4.2.0, )"
+            },
+            "Polly": {
+              "target": "Package",
+              "version": "[7.2.3, )"
+            },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[6.5.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

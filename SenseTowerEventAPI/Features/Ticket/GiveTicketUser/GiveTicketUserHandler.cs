@@ -27,15 +27,21 @@ public class GiveTicketUserHandler : IRequestHandler<GiveTicketUserCommand, Guid
     public async Task<Guid> Handle(GiveTicketUserCommand request, CancellationToken cancellationToken)
     {
         var foundUser = _evenInstance.Users.FirstOrDefault(u => u.Id == request.Owner);
+        
+        if (foundUser == null) throw new ScException("Не удалось выдать билет. Пользователь не найден");
+
         var eventTickers = await _ticketRepository.GetAllEventTickets(request.EventId);
+        var createPaymentTransactionId  = await _ticketRepository.CreateTicketPayment();
+
+        if (createPaymentTransactionId == Guid.Empty) await _ticketRepository.CancelTicketPayment(createPaymentTransactionId);
 
         eventTickers.RemoveAll(t => t.Id == request.Id);
 
-        var filter = Builders<Models.Event>.Filter.Eq("id", request.EventId);
         var update = Builders<Models.Event>.Update.Set("tickets", eventTickers);
 
-        await _eventContext.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
-        if (foundUser == null) throw new ScException("Не удалось выдать билет. Пользователь не найден");
+        await _eventContext.UpdateOneAsync(e=> e.Id == request.EventId, update, cancellationToken: cancellationToken);
+
+        await _ticketRepository.ConfirmTicketPayment(createPaymentTransactionId);
 
         return request.Owner;
     }

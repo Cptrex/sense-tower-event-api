@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+   st-image:
+    image: cptrex/st-service-image
+    ports:
+    - "5020:80"
+   st-space:
+    image: cptrex/st-service-space
+    ports:
+    - "5030:80"

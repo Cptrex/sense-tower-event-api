@@ -1,8 +1,10 @@
-﻿using JetBrains.Annotations;
+﻿using AutoMapper;
+using JetBrains.Annotations;
 using MediatR;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using SenseTowerEventAPI.Models.Context;
+#pragma warning disable CS0618
 
 namespace SenseTowerEventAPI.Features.Event.EventCreate;
 
@@ -20,9 +22,12 @@ public class EventCreateCommandHandler : IRequestHandler<EventCreateCommand, Gui
 
     public async Task<Guid> Handle(EventCreateCommand request, CancellationToken cancellationToken)
     {
-        var newEvent = new Models.Event(Guid.NewGuid(), request.Title, request.StartDate, request.EndDate, request.Description, request.ImageId, request.SpaceId, request.Tickets);
+        var config = new MapperConfiguration(cfg => cfg.CreateMap<EventCreateCommand, Models.Event>());
+        var mapper = new Mapper(config);
 
-        await _eventContext.InsertOneAsync(newEvent, cancellationToken: cancellationToken);
+        var newEvent = mapper.Map<EventCreateCommand, Models.Event>(request);
+
+        await _eventContext.InsertOneAsync(newEvent, cancellationToken);
 
         return newEvent.Id;
     }

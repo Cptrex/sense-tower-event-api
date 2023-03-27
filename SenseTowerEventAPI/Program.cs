@@ -10,6 +10,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SenseTowerEventAPI.Models;
 using SenseTowerEventAPI.Repository.EventRepository;
 using SenseTowerEventAPI.Repository.TicketRepository;
+using MediatR;
+using Polly;
+using SenseTowerEventAPI.Extensions.Behaviors;
+using SenseTowerEventAPI.Extensions.Middleware;
+using SenseTowerEventAPI.Extensions.Services;
 #pragma warning disable CS0618
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +31,15 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddHttpClient<ITicketRepository, TicketRepository>( client =>
+    {
+        client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:PaymentServiceURL"] ?? string.Empty);
+        client.DefaultRequestHeaders.Add("Accept", "application/json");
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {builder.Configuration["ServiceEndpoints:TokenAuthorization"]}");
+    })
+    .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2)))
+    .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(10)));
 
 // Add services to the container.
 builder.Services.AddControllers().AddFluentValidation(f => f.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
@@ -73,18 +87,22 @@ builder.Services.AddSwaggerGen(swagger =>
     swagger.IncludeXmlComments(xmlPath);
 });
 
-ModelMapper.InitRegisterMap();
+DBContextMapper.InitRegisterMap();
 builder.Services.Configure<EventContext>(builder.Configuration.GetSection("EventsDatabaseSettings"));
 
 builder.Services.AddValidatorsFromAssemblyContaining<EventValidatorBehavior>();
+builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
 builder.Services.AddScoped<IEventValidatorBehavior, EventValidatorBehavior>();
 builder.Services.AddSingleton<IEventSingleton, EventSingleton>();
 builder.Services.AddSingleton<IEventValidatorRepository, EventValidatorRepository>();
 builder.Services.AddSingleton<ITicketRepository, TicketRepository>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 var app = builder.Build();
+
+app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
 app.UseCors(b =>
 {

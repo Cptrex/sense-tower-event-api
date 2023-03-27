@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using SenseTowerEventAPI.Extensions;
+using SC.Internship.Common.Exceptions;
 using SenseTowerEventAPI.Interfaces;
 using SenseTowerEventAPI.Models.Context;
 
@@ -26,13 +26,13 @@ public class CheckTicketUserExistHandler : IRequestHandler<CheckTicketUserExistQ
     {
         var foundUser = _eventInstance.Users.FirstOrDefault(u => u.Id == request.UserId);
         
-        if (foundUser == null) throw new StException("Пользователь не найден");
+        if (foundUser == null) throw new ScException("Пользователь не найден");
 
-        var foundEvent = (await _eventContext.Find(e=> e.Id == request.EventId).ToListAsync(cancellationToken: cancellationToken)).First();
+        var foundEvent = (await _eventContext.Find(e=> e.Id == request.EventId).ToListAsync(cancellationToken)).First();
 
         var foundTicketUser = foundEvent.Tickets.FirstOrDefault(t => t.Id == request.TicketId);
 
-        if (foundTicketUser == null) throw new StException("Билет не найден");
+        if (foundTicketUser == null) throw new ScException("Билет не найден");
 
         return true;
     }

@@ -2,7 +2,10 @@
 using MediatR;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using SenseTowerEventAPI.Interfaces;
+using SenseTowerEventAPI.Models;
 using SenseTowerEventAPI.Models.Context;
+using SenseTowerEventAPI.Utils;
 
 namespace SenseTowerEventAPI.Features.Event.EventDelete;
 
@@ -10,9 +13,10 @@ namespace SenseTowerEventAPI.Features.Event.EventDelete;
 public class EventDeleteCommandHandler : IRequestHandler<EventDeleteCommand, Guid>
 {
     private readonly IMongoCollection<Models.Event> _eventContext;
-
-    public EventDeleteCommandHandler(IOptions<EventContext> options)
+    private readonly  IRabbitMQProducer _rabbitMQProducer;
+    public EventDeleteCommandHandler(IOptions<EventContext> options, IRabbitMQProducer rabbitMqProducer)
     {
+        _rabbitMQProducer = rabbitMqProducer;
         var mongoClient = new MongoClient(options.Value.ConnectionString);
         _eventContext = mongoClient.GetDatabase(options.Value.DatabaseName)
             .GetCollection<Models.Event>(options.Value.CollectionName);
@@ -22,6 +26,13 @@ public class EventDeleteCommandHandler : IRequestHandler<EventDeleteCommand, Gui
     {
         var deletedEvent = await _eventContext.FindOneAndDeleteAsync(e=> e.Id == request.Id, cancellationToken: cancellationToken);
 
+        var eventOperationModel = new EventOperationModel
+        {
+            Type = EventOperationType.EventDeleteEvent, 
+            DeletedId = deletedEvent.Id
+        };
+
+        _rabbitMQProducer.SendDeleteEventQueueMessage(eventOperationModel);
         return deletedEvent.Id;
     }
 }
