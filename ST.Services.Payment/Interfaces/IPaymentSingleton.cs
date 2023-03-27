@@ -7,7 +7,7 @@ public interface IPaymentSingleton
 {
     [UsedImplicitly] public List<PaymentTransaction> PaymentTransactions { get; set; }
 
-    public void SetTransactionAsCanceled(Guid transactionId);
-    public void SetTransactionAsConfirm(Guid transactionId);
-    public Guid AddTransactionToPool();
+    public void SetTransactionAsCanceled(Guid transactionId, CancellationToken cancellationToken);
+    public void SetTransactionAsConfirm(Guid transactionId, CancellationToken cancellationToken);
+    public Guid AddTransactionToPool(CancellationToken cancellationToken);
 }

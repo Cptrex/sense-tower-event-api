@@ -13,6 +13,8 @@ using SenseTowerEventAPI.Repository.TicketRepository;
 using MediatR;
 using Polly;
 using SenseTowerEventAPI.Extensions.Behaviors;
+using SenseTowerEventAPI.Extensions.Middleware;
+using SenseTowerEventAPI.Extensions.Services;
 #pragma warning disable CS0618
 
 var builder = WebApplication.CreateBuilder(args);
@@ -89,6 +91,7 @@ DBContextMapper.InitRegisterMap();
 builder.Services.Configure<EventContext>(builder.Configuration.GetSection("EventsDatabaseSettings"));
 
 builder.Services.AddValidatorsFromAssemblyContaining<EventValidatorBehavior>();
+builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
 builder.Services.AddScoped<IEventValidatorBehavior, EventValidatorBehavior>();
 builder.Services.AddSingleton<IEventSingleton, EventSingleton>();
 builder.Services.AddSingleton<IEventValidatorRepository, EventValidatorRepository>();
@@ -97,8 +100,9 @@ builder.Services.AddSingleton<ITicketRepository, TicketRepository>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-
 var app = builder.Build();
+
+app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
 app.UseCors(b =>
 {

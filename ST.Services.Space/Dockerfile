@@ -6,10 +6,11 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["ST.Services.Space/ST.Services.Space.csproj", "ST.Services.Space/"]
+COPY ["ST.Services.Space.csproj", "ST.Services.Space/"]
 RUN dotnet restore "ST.Services.Space/ST.Services.Space.csproj"
-COPY . .
+
 WORKDIR "/src/ST.Services.Space"
+COPY . .
 RUN dotnet build "ST.Services.Space.csproj" -c Release -o /app/build
 
 FROM build AS publish

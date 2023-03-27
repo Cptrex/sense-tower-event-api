@@ -1,7 +1,16 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
+using Polly;
+using ST.Services.Space.Extensions.Middleware;
+using ST.Services.Space.Extensions.Services;
+using ST.Services.Space.Interfaces;
+using ST.Services.Space.Models;
+using ST.Services.Space.Repository;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHostedService<RabbitMQConsumerService>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -16,9 +25,25 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddHttpClient<ISpaceRepository, SpaceRepository>(client =>
+    {
+        client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:EventServiceURL"] ?? string.Empty);
+        client.DefaultRequestHeaders.Add("Accept", "application/json");
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {builder.Configuration["ServiceEndpoints:TokenAuthorization"]}");
+    })
+    .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2)))
+    .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(10)));
+
+
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers();
+
+builder.Services.AddSingleton<ISpaceSingleton, SpaceSingleton>();
+builder.Services.AddTransient<ISpaceRepository, SpaceRepository>();
 
 var app = builder.Build();
+
+app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
 app.UseCors(b =>
 {

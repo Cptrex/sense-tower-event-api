@@ -3,7 +3,7 @@ using SenseTowerEventAPI.Interfaces;
 using SenseTowerEventAPI.Models;
 using SenseTowerEventAPI.Repository.EventRepository;
 
-namespace SenseTowerEventAPI.Tests;
+namespace SenseTowerEventAPI.UnitTests;
 
 [TestFixture]
 public class EventValidatorRepositoryTests

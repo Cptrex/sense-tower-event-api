@@ -28,6 +28,8 @@ public class TicketController : ControllerBase
     [HttpPost]
     public async Task<ScResult<Guid>> GiveTicketUser(GiveTicketUserCommand cmd)
     {
+        if (ModelState.IsValid == false) return new ScResult<Guid> { Error = new ScError { Message = "Ошибка передачи данных" } };
+
         var result = await _mediator.Send(cmd);
 
         return new ScResult<Guid>(result);
@@ -40,9 +42,11 @@ public class TicketController : ControllerBase
     [HttpGet]
     public async Task<ScResult<bool>> CheckUserTicketExist(CheckTicketUserExistQuery cmd)
     {
+        if (ModelState.IsValid == false) return new ScResult<bool> { Error = new ScError { Message = "Ошибка передачи данных" } };
+
         var searchResult = await _mediator.Send(cmd);
         
-        return await Task.FromResult(new ScResult<bool>(searchResult));
+        return new ScResult<bool>(searchResult);
     }
 
     /// <summary>
@@ -53,8 +57,10 @@ public class TicketController : ControllerBase
     [HttpPut]
     public async Task<ScResult<Guid>> AddTicketEvent(AddTicketCommand cmd)
     {
+        if (ModelState.IsValid == false) return new ScResult<Guid> { Error = new ScError { Message = "Ошибка передачи данных" } };
+
         var result = await _mediator.Send(cmd);
 
-        return await Task.FromResult(new ScResult<Guid>(result));
+        return new ScResult<Guid>(result);
     }
 }

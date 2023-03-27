@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SC.Internship.Common.ScResult;
 using ST.Services.Payment.Interfaces;
 
 namespace ST.Services.Payment.Controllers;
+
 [Route("[controller]")]
 [ApiController]
 [Authorize]
@@ -17,26 +17,26 @@ public class PaymentController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ScResult<Guid>> CreatePayment()
+    public async Task<IActionResult> CreatePayment(CancellationToken cancellationToken)
     {
-        var transactionId = _paymentInstance.AddTransactionToPool();
+        var transactionId = _paymentInstance.AddTransactionToPool(cancellationToken);
 
-        return await Task.FromResult(new ScResult<Guid>(transactionId));
+        return await Task.FromResult(Ok(transactionId));
     }
 
     [HttpPut]
-    public async Task<ScResult> ConfirmPayment(Guid createdTransactionId)
+    public async Task<IActionResult> ConfirmPayment(Guid createdTransactionId, CancellationToken cancellationToken)
     {
-        _paymentInstance.SetTransactionAsConfirm(createdTransactionId);
+        _paymentInstance.SetTransactionAsConfirm(createdTransactionId, cancellationToken);
 
-        return await Task.FromResult(new ScResult());
+        return await Task.FromResult(Ok());
     }
 
     [HttpPatch]
-    public async Task<ScResult> CancelPayment(Guid createdTransactionId)
+    public async Task<IActionResult> CancelPayment(Guid createdTransactionId, CancellationToken cancellationToken)
     {
-        _paymentInstance.SetTransactionAsCanceled(createdTransactionId);
+        _paymentInstance.SetTransactionAsCanceled(createdTransactionId, cancellationToken);
 
-        return await Task.FromResult(new ScResult());
+        return await Task.FromResult(Ok());
     }
 }

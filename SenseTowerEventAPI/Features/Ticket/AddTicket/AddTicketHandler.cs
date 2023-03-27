@@ -30,7 +30,7 @@ public class AddTicketHandler :IRequestHandler<AddTicketCommand, Guid>
 
         var ticketLastNumber = await _ticketRepository.GetLastTicketNumberInEvent(foundEvent.Id);
         
-        var ticket = new Models.Ticket(Guid.NewGuid(),foundEvent.Id, request.Owner, ticketLastNumber + 1);
+        var ticket = new Models.Ticket(Guid.NewGuid(),foundEvent.Id, request.Owner, ticketLastNumber + 1, request.Price);
         
         foundEvent.Tickets.Add(ticket);
 

@@ -35,6 +35,8 @@ public class EventController : ControllerBase
     [HttpPost]
     public async Task<ScResult<ValidationResult>> CreateEvent(EventCreateCommand cmd, CancellationToken cancellationToken)
     {
+        if (ModelState.IsValid == false) return new ScResult<ValidationResult> { Error = new ScError { Message = "Ошибка передачи данных" } };
+
         var eventData = new Models.Event();
         eventData.InitEventCreateCommand(cmd);
         var result = _validator.Validate(eventData);
@@ -52,6 +54,8 @@ public class EventController : ControllerBase
     [HttpDelete("/{eventId:guid}")]
     public async Task<ScResult> DeleteEvent([FromRoute] Guid eventId, CancellationToken cancellationToken)
     {
+        if (ModelState.IsValid == false) return new ScResult { Error = new ScError { Message = "Ошибка передачи данных" }};
+
         var cmd = new EventDeleteCommand { Id = eventId };
         await _mediator.Send(cmd, cancellationToken);
 
@@ -68,6 +72,8 @@ public class EventController : ControllerBase
     [HttpPut("/{eventId:guid}")]
     public async Task<ScResult> UpdateEventById([FromRoute] Guid eventId, EventUpdateCommand cmd, CancellationToken cancellationToken)
     {
+        if (ModelState.IsValid == false) return new ScResult { Error = new ScError { Message = "Ошибка передачи данных" } };
+
         await _mediator.Send(cmd, cancellationToken);
 
         return new ScResult();
@@ -81,6 +87,8 @@ public class EventController : ControllerBase
     [HttpGet("events")]
     public async Task<ScResult<IEnumerable<Models.Event>>> GetEventsList(CancellationToken cancellationToken)
     {
+        if (ModelState.IsValid == false) return new ScResult<IEnumerable<Models.Event>>{ Error = new ScError { Message = "Ошибка передачи данных" } };
+
         var cmd = new EventGetListQuery();
         var eventList = await _mediator.Send(cmd, cancellationToken);
 

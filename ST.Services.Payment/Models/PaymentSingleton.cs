@@ -7,7 +7,7 @@ public class PaymentSingleton : IPaymentSingleton
 {
     public List<PaymentTransaction> PaymentTransactions { get; set; } = new();
 
-    public void SetTransactionAsCanceled(Guid transactionId)
+    public void SetTransactionAsCanceled(Guid transactionId, CancellationToken cancellationToken)
     {
         var transaction = PaymentTransactions.FirstOrDefault(p => p.Id == transactionId);
 
@@ -17,16 +17,17 @@ public class PaymentSingleton : IPaymentSingleton
         transaction.State = PaymentState.Canceled;
     }
 
-    public void SetTransactionAsConfirm(Guid transactionId)
+    public void SetTransactionAsConfirm(Guid transactionId, CancellationToken cancellationToken)
     {
         var transaction = PaymentTransactions.FirstOrDefault(p => p.Id == transactionId);
 
-        if (transaction != null) return;
+        if (transaction == null) return;
+
         transaction.DateConfirmation = DateTime.UtcNow;
         transaction.State = PaymentState.Confirmed;
     }
 
-    public Guid AddTransactionToPool()
+    public Guid AddTransactionToPool(CancellationToken cancellationToken)
     {
         var paymentTransaction = new PaymentTransaction();
         PaymentTransactions.Add(paymentTransaction);
