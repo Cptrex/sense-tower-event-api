@@ -1,8 +1,6 @@
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
-using SenseTowerEventAPI.Features.Event;
 using SenseTowerEventAPI.Interfaces;
 using SenseTowerEventAPI.Models.Context;
 using System.Reflection;
@@ -15,6 +13,7 @@ using Polly;
 using SenseTowerEventAPI.Extensions.Behaviors;
 using SenseTowerEventAPI.Extensions.Middleware;
 using SenseTowerEventAPI.Extensions.Services;
+using SenseTowerEventAPI.Features.Event.EventCreate;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +21,8 @@ builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    }).AddJwtBearer(options =>
+    })
+    .AddJwtBearer(options =>
     {
         options.Authority = builder.Configuration["IdentityServer4Settings:Authority"];
         options.RequireHttpsMetadata = false;
@@ -31,7 +31,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddHttpClient<ITicketRepository, TicketRepository>( client =>
+builder.Services.AddHttpClient<ITicketRepository, TicketRepository>(client =>
     {
         client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:PaymentServiceURL"] ?? string.Empty);
         client.DefaultRequestHeaders.Add("Accept", "application/json");
@@ -43,9 +43,10 @@ builder.Services.AddHttpClient<ITicketRepository, TicketRepository>( client =>
 /*// Add services to the container.
 builder.Services.AddControllers().AddFluentValidation(f => f.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));*/
 
-builder.Services.AddValidatorsFromAssemblyContaining<EventValidator>();
+builder.Services.AddControllers();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddValidatorsFromAssemblyContaining<EventCreateValidator>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(swagger =>
 {
@@ -89,9 +90,9 @@ builder.Services.AddSwaggerGen(swagger =>
 DBContextMapper.InitRegisterMap();
 builder.Services.Configure<EventContext>(builder.Configuration.GetSection("EventsDatabaseSettings"));
 
-builder.Services.AddValidatorsFromAssemblyContaining<EventValidatorBehavior>();
+builder.Services.AddValidatorsFromAssemblyContaining<EventCreateValidatorBehavior>();
 builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
-builder.Services.AddScoped<IEventValidatorBehavior, EventValidatorBehavior>();
+builder.Services.AddScoped<IEventCreateValidatorBehavior, EventCreateValidatorBehavior>();
 builder.Services.AddSingleton<IEventSingleton, EventSingleton>();
 builder.Services.AddSingleton<IEventValidatorRepository, EventValidatorRepository>();
 builder.Services.AddSingleton<ITicketRepository, TicketRepository>();
@@ -111,8 +112,6 @@ app.UseCors(b =>
 IdentityModelEventSource.ShowPII = true;
 app.UseSwagger();
 app.UseSwaggerUI();
-
-app.UseHsts();
 
 app.UseRouting();
 

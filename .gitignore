@@ -362,6 +362,7 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /.vs
-/SenseTowerEventAPI/obj/Debug
+SenseTowerEventAPI/obj/Debug
 SenseTowerEventAPI/obj/Release
 SenseTowerEventAPI/obj/publish
+*.DotSettings

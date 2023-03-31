@@ -17,9 +17,9 @@ namespace SenseTowerEventAPI.Features.Event;
 public class EventController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly IEventValidatorBehavior _validator;
+    private readonly IEventCreateValidatorBehavior _validator;
 
-    public EventController(IMediator mediator, IEventValidatorBehavior validator)
+    public EventController(IMediator mediator, IEventCreateValidatorBehavior validator)
     {
         _mediator = mediator;
         _validator = validator;
@@ -37,9 +37,7 @@ public class EventController : ControllerBase
     {
         if (ModelState.IsValid == false) return new ScResult<ValidationResult> { Error = new ScError { Message = "Ошибка передачи данных" } };
 
-        var eventData = new Models.Event();
-        eventData.InitEventCreateCommand(cmd);
-        var result = _validator.Validate(eventData);
+        var result = _validator.Validate(cmd);
         await _mediator.Send(cmd, cancellationToken);
 
         return new ScResult<ValidationResult>(result);

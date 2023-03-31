@@ -1,10 +1,39 @@
-version: '3.7'
+version: '3.9'
 services:
+   rabbitmq:
+      image: rabbitmq:3.11.11-management
+      hostname: rabbitmq
+      ports:
+         - 5672:5672
+         - 5671:5671
+         - 15672:15672
+         - 4369:4369
+      expose:
+         - 5672
+         - 15672
+         - 5671
+         - 4369
+      networks:
+         - stnetworkapi
+      environment:
+         - RABBITMQ_DEFAULT_USER=guest
+         - RABBITMQ_DEFAULT_PASS=guest
    st-image:
-    image: cptrex/st-service-image
-    ports:
-    - "5020:80"
+      image: cptrex/st-service-image
+      ports:
+         - 5020:80
+      depends_on:
+         - rabbitmq
+      networks:
+         - stnetworkapi
    st-space:
-    image: cptrex/st-service-space
-    ports:
-    - "5030:80"
+      image: cptrex/st-service-space
+      ports:
+         - 5030:80
+      depends_on:
+         - rabbitmq
+      networks:
+         - stnetworkapi
+networks:
+   stnetworkapi:
+      name: stnetworkapi

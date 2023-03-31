@@ -1,4 +1,5 @@
-﻿namespace ST.Services.Payment.Utils;
+﻿// ReSharper disable IdentifierTypo
+namespace ST.Services.Payment.Enumerics;
 
 public enum PaymentState
 {

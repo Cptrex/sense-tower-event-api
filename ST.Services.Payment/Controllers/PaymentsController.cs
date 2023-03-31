@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ST.Services.Payment.Enumerics;
 using ST.Services.Payment.Interfaces;
 
 namespace ST.Services.Payment.Controllers;
@@ -7,11 +8,11 @@ namespace ST.Services.Payment.Controllers;
 [Route("[controller]")]
 [ApiController]
 [Authorize]
-public class PaymentController : ControllerBase
+public class PaymentsController : ControllerBase
 {
     private readonly IPaymentSingleton _paymentInstance;
 
-    public PaymentController(IPaymentSingleton paymentInstance)
+    public PaymentsController(IPaymentSingleton paymentInstance)
     {
         _paymentInstance = paymentInstance;
     }
@@ -24,18 +25,10 @@ public class PaymentController : ControllerBase
         return await Task.FromResult(Ok(transactionId));
     }
 
-    [HttpPut]
-    public async Task<IActionResult> ConfirmPayment(Guid createdTransactionId, CancellationToken cancellationToken)
+    [HttpPut("/{transactionId:guid}/state={state:int}")]
+    public async Task<IActionResult> ChangePaymentState([FromRoute] Guid transactionId, [FromRoute] int state, CancellationToken cancellationToken)
     {
-        _paymentInstance.SetTransactionAsConfirm(createdTransactionId, cancellationToken);
-
-        return await Task.FromResult(Ok());
-    }
-
-    [HttpPatch]
-    public async Task<IActionResult> CancelPayment(Guid createdTransactionId, CancellationToken cancellationToken)
-    {
-        _paymentInstance.SetTransactionAsCanceled(createdTransactionId, cancellationToken);
+        _paymentInstance.ChangePaymentState((PaymentState) state, transactionId, cancellationToken);
 
         return await Task.FromResult(Ok());
     }

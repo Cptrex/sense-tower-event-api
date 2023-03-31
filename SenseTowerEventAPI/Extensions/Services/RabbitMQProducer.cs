@@ -35,6 +35,6 @@ public class RabbitMQProducer : IRabbitMQProducer
         var body = Encoding.UTF8.GetBytes(json);
         channel.BasicPublish(exchange: "", routingKey: "event-delete-queue", body: body);
 
-        //_logger.LogInformation($"{DateTime.Now} | [EVENT SERVICE] event deleted {message}");
+        //_logger.LogInformation($"{DateTimeOffset.Now} | [EVENT SERVICE] event deleted {message}");
     }
 }

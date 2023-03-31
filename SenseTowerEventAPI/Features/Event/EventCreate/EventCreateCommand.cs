@@ -1,7 +1,9 @@
-﻿using MediatR;
+﻿using JetBrains.Annotations;
+using MediatR;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Swashbuckle.AspNetCore.Annotations;
+#pragma warning disable CS8618
 
 namespace SenseTowerEventAPI.Features.Event.EventCreate;
 
@@ -24,11 +26,11 @@ public class EventCreateCommand : IRequest<Guid>
     /// <summary>
     /// Дата начала меропрития
     /// </summary>
-    public DateTime StartDate { get; set; }
+    public DateTimeOffset StartDate { get; set; }
     /// <summary>
     /// Дата завершения мероприятия
     /// </summary>
-    public DateTime EndDate { get; set; }
+    public DateTimeOffset EndDate { get; set; }
     /// <summary>
     /// Описание мероприятия
     /// </summary>
@@ -45,18 +47,6 @@ public class EventCreateCommand : IRequest<Guid>
     /// <summary>
     /// Список билетов мероприятия
     /// </summary>
+    [UsedImplicitly]
     public List<Models.Ticket> Tickets { get; set; }
-
-    public EventCreateCommand(Guid id, string title, DateTime startDate, DateTime endDate,
-        string description, Guid imageId, Guid spaceId, List<Models.Ticket> tickets)
-    {
-        Id = id;
-        Title = title;
-        StartDate = startDate;
-        EndDate = endDate;
-        Description = description;
-        ImageId = imageId;
-        SpaceId = spaceId;
-        Tickets = tickets;
-    }
 }

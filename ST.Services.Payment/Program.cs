@@ -31,7 +31,7 @@ builder.Services.AddHttpClient("",client =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 
-builder.Services.AddSingleton<IPaymentSingleton, PaymentSingleton>();
+builder.Services.AddSingleton<IPaymentSingleton, PaymentsSingleton>();
 
 var app = builder.Build();
 

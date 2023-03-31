@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Swashbuckle.AspNetCore.Annotations;
+#pragma warning disable CS8618
 
 namespace SenseTowerEventAPI.Features.Event.EventUpdate;
 
@@ -20,11 +21,11 @@ public class EventUpdateCommand : IRequest<Guid>
     /// <summary>
     /// Дата начала меропрития
     /// </summary>
-    public DateTime StartDate { get; set; }
+    public DateTimeOffset StartDate { get; set; }
     /// <summary>
     /// Дата завершения мероприятия
     /// </summary>
-    public DateTime EndDate { get; set; }
+    public DateTimeOffset EndDate { get; set; }
     /// <summary>
     /// Описание мероприятия
     /// </summary>
@@ -41,17 +42,4 @@ public class EventUpdateCommand : IRequest<Guid>
     /// Список билетов мероприятия
     /// </summary>
     public List<Models.Ticket> Tickets { get; set; }
-
-    public EventUpdateCommand(Guid id, string title, DateTime startDate, DateTime endDate,
-        string description, Guid imageId, Guid spaceId, List<Models.Ticket> tickets)
-    {
-        Id = id;
-        Title = title;
-        StartDate = startDate;
-        EndDate = endDate;
-        Description = description;
-        ImageId = imageId;
-        SpaceId = spaceId;
-        Tickets = tickets;
-    }
 }

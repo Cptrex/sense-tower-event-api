@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Swashbuckle.AspNetCore.Annotations;
+// ReSharper disable UnusedMember.Global
 
 namespace SenseTowerEventAPI.Features.Ticket.GiveTicketUser;
 
@@ -25,12 +26,4 @@ public class GiveTicketUserCommand : IRequest<Guid>
     /// Место мероприятия
     /// </summary>
     public int PlaceNumber { get; set; }
-
-    public GiveTicketUserCommand(Guid id, Guid eventId, Guid owner, int placeNumber)
-    {
-        Id = id;
-        EventId = eventId;
-        Owner = owner;
-        PlaceNumber = placeNumber;
-    }
 }

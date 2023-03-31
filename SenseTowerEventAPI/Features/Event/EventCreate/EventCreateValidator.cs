@@ -2,11 +2,11 @@
 using SenseTowerEventAPI.Interfaces;
 #pragma warning disable CA1847
 
-namespace SenseTowerEventAPI.Features.Event;
+namespace SenseTowerEventAPI.Features.Event.EventCreate;
 
-public class EventValidator : AbstractValidator<Models.Event>
+public class EventCreateValidator : AbstractValidator<EventCreateCommand>
 {
-    public EventValidator(IEventSingleton _eventInstance, IEventValidatorRepository _eventValidatorRepository)
+    public EventCreateValidator(IEventSingleton _eventInstance, IEventValidatorRepository _eventValidatorRepository)
     {
         RuleFor(e => e.EndDate)
             .NotNull().NotEmpty().WithMessage("EndDate не может быть пустым");
