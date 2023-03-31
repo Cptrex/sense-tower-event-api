@@ -15,7 +15,6 @@ using Polly;
 using SenseTowerEventAPI.Extensions.Behaviors;
 using SenseTowerEventAPI.Extensions.Middleware;
 using SenseTowerEventAPI.Extensions.Services;
-#pragma warning disable CS0618
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,8 +40,8 @@ builder.Services.AddHttpClient<ITicketRepository, TicketRepository>( client =>
     .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2)))
     .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(10)));
 
-// Add services to the container.
-builder.Services.AddControllers().AddFluentValidation(f => f.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
+/*// Add services to the container.
+builder.Services.AddControllers().AddFluentValidation(f => f.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));*/
 
 builder.Services.AddValidatorsFromAssemblyContaining<EventValidator>();
 
