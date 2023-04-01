@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using SC.Internship.Common.Exceptions;
 using SenseTowerEventAPI.Interfaces;
-using SenseTowerEventAPI.Models.Context;
+using SenseTowerEventAPI.MongoDB.Context;
 
 namespace SenseTowerEventAPI.Features.Ticket.CheckTicketUserExist;
 

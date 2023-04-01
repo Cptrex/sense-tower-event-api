@@ -1,6 +1,4 @@
-﻿using ST.Services.Image.Utils;
-
-namespace ST.Services.Image.Models;
+﻿namespace ST.Services.Image.Models;
 
 public class EventOperationModel
 {

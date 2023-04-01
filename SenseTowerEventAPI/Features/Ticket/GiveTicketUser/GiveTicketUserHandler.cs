@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using SC.Internship.Common.Exceptions;
 using SenseTowerEventAPI.Interfaces;
-using SenseTowerEventAPI.Models.Context;
+using SenseTowerEventAPI.MongoDB.Context;
 
 namespace SenseTowerEventAPI.Features.Ticket.GiveTicketUser;
 
@@ -13,9 +13,9 @@ public class GiveTicketUserHandler : IRequestHandler<GiveTicketUserCommand, Guid
 {
     private readonly IMongoCollection<Models.Event> _eventContext;
     private readonly IEventSingleton _evenInstance;
-    private readonly ITicketRepository _ticketRepository;
+    private readonly ITicketManager _ticketRepository;
 
-    public GiveTicketUserHandler(IEventSingleton evenInstance, IOptions<EventContext> options, ITicketRepository ticketRepository)
+    public GiveTicketUserHandler(IEventSingleton evenInstance, IOptions<EventContext> options, ITicketManager ticketRepository)
     {
         _evenInstance = evenInstance;
         _ticketRepository = ticketRepository;

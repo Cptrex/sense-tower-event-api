@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using SC.Internship.Common.Exceptions;
 using SenseTowerEventAPI.Interfaces;
-using SenseTowerEventAPI.Models.Context;
+using SenseTowerEventAPI.MongoDB.Context;
 
 namespace SenseTowerEventAPI.Features.Ticket.AddTicket;
 
@@ -12,9 +12,9 @@ namespace SenseTowerEventAPI.Features.Ticket.AddTicket;
 public class AddTicketHandler :IRequestHandler<AddTicketCommand, Guid>
 {
     private readonly IMongoCollection<Models.Event> _eventContext;
-    private  readonly ITicketRepository _ticketRepository;
+    private  readonly ITicketManager _ticketRepository;
 
-    public AddTicketHandler(IOptions<EventContext> options, ITicketRepository ticketRepository)
+    public AddTicketHandler(IOptions<EventContext> options, ITicketManager ticketRepository)
     {
         _ticketRepository = ticketRepository;
         var mongoClient = new MongoClient(options.Value.ConnectionString);

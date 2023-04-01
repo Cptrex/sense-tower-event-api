@@ -1,30 +1,26 @@
 ﻿using JetBrains.Annotations;
 using MediatR;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using SenseTowerEventAPI.Interfaces;
 using SenseTowerEventAPI.Models;
-using SenseTowerEventAPI.Models.Context;
-using SenseTowerEventAPI.Utils;
 
 namespace SenseTowerEventAPI.Features.Event.EventDelete;
 
 [UsedImplicitly]
 public class EventDeleteCommandHandler : IRequestHandler<EventDeleteCommand, Guid>
 {
-    private readonly IMongoCollection<Models.Event> _eventContext;
     private readonly  IRabbitMQProducer _rabbitMQProducer;
-    public EventDeleteCommandHandler(IOptions<EventContext> options, IRabbitMQProducer rabbitMqProducer)
+    private readonly IMongoDBCommunicator _mongoDb;
+
+    public EventDeleteCommandHandler(IRabbitMQProducer rabbitMqProducer, IMongoDBCommunicator mongoDb)
     {
         _rabbitMQProducer = rabbitMqProducer;
-        var mongoClient = new MongoClient(options.Value.ConnectionString);
-        _eventContext = mongoClient.GetDatabase(options.Value.DatabaseName)
-            .GetCollection<Models.Event>(options.Value.CollectionName);
+        _mongoDb = mongoDb;
     }
 
     public async Task<Guid> Handle(EventDeleteCommand request, CancellationToken cancellationToken)
     {
-        var deletedEvent = await _eventContext.FindOneAndDeleteAsync(e=> e.Id == request.Id, cancellationToken: cancellationToken);
+        var deletedEvent = await _mongoDb.DbCollection.FindOneAndDeleteAsync(e=> e.Id == request.Id, cancellationToken: cancellationToken);
 
         var eventOperationModel = new EventOperationModel
         {

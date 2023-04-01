@@ -2,18 +2,19 @@ using FluentValidation;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using SenseTowerEventAPI.Interfaces;
-using SenseTowerEventAPI.Models.Context;
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SenseTowerEventAPI.Models;
-using SenseTowerEventAPI.Repository.EventRepository;
-using SenseTowerEventAPI.Repository.TicketRepository;
 using MediatR;
 using Polly;
-using SenseTowerEventAPI.Extensions.Behaviors;
-using SenseTowerEventAPI.Extensions.Middleware;
-using SenseTowerEventAPI.Extensions.Services;
 using SenseTowerEventAPI.Features.Event.EventCreate;
+using SenseTowerEventAPI.Middleware;
+using SenseTowerEventAPI.Behaviors;
+using SenseTowerEventAPI.RabbitMQ;
+using SenseTowerEventAPI.MongoDB.Context;
+using SenseTowerEventAPI.MongoDB;
+using SenseTowerEventAPI.Features.Ticket;
+using SenseTowerEventAPI.Features.Event;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddHttpClient<ITicketRepository, TicketRepository>(client =>
+builder.Services.AddHttpClient<ITicketManager, TicketManager>(client =>
     {
         client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:PaymentServiceURL"] ?? string.Empty);
         client.DefaultRequestHeaders.Add("Accept", "application/json");
@@ -40,11 +41,8 @@ builder.Services.AddHttpClient<ITicketRepository, TicketRepository>(client =>
     .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2)))
     .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(10)));
 
-/*// Add services to the container.
-builder.Services.AddControllers().AddFluentValidation(f => f.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));*/
-
 builder.Services.AddControllers();
-
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddValidatorsFromAssemblyContaining<EventCreateValidator>();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -94,8 +92,9 @@ builder.Services.AddValidatorsFromAssemblyContaining<EventCreateValidatorBehavio
 builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
 builder.Services.AddScoped<IEventCreateValidatorBehavior, EventCreateValidatorBehavior>();
 builder.Services.AddSingleton<IEventSingleton, EventSingleton>();
-builder.Services.AddSingleton<IEventValidatorRepository, EventValidatorRepository>();
-builder.Services.AddSingleton<ITicketRepository, TicketRepository>();
+builder.Services.AddSingleton<IEventValidatorManager, EventValidatorManager>();
+builder.Services.AddSingleton<ITicketManager, TicketManager>();
+builder.Services.AddSingleton<IMongoDBCommunicator, MongoDBCommunicator>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
@@ -104,10 +103,7 @@ var app = builder.Build();
 
 app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
-app.UseCors(b =>
-{
-    b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-});
+app.UseCors(b => b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 IdentityModelEventSource.ShowPII = true;
 app.UseSwagger();

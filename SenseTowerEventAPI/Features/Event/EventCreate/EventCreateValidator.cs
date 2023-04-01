@@ -6,7 +6,7 @@ namespace SenseTowerEventAPI.Features.Event.EventCreate;
 
 public class EventCreateValidator : AbstractValidator<EventCreateCommand>
 {
-    public EventCreateValidator(IEventSingleton _eventInstance, IEventValidatorRepository _eventValidatorRepository)
+    public EventCreateValidator(IEventSingleton _eventInstance, IEventValidatorManager _eventValidatorRepository)
     {
         RuleFor(e => e.EndDate)
             .NotNull().NotEmpty().WithMessage("EndDate не может быть пустым");

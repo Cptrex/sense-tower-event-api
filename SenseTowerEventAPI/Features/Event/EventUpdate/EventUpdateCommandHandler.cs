@@ -1,30 +1,27 @@
 ﻿using JetBrains.Annotations;
 using MediatR;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using SenseTowerEventAPI.Models.Context;
+using SenseTowerEventAPI.Interfaces;
 
 namespace SenseTowerEventAPI.Features.Event.EventUpdate;
 
 [UsedImplicitly]
 public class EventUpdateCommandHandler : IRequestHandler<EventUpdateCommand, Guid>
 {
-    private readonly IMongoCollection<Models.Event> _eventContext;
+    private readonly IMongoDBCommunicator _mongoDb;
 
-    public EventUpdateCommandHandler(IOptions<EventContext> options)
+    public EventUpdateCommandHandler(IMongoDBCommunicator mongoDb)
     {
-        var mongoClient = new MongoClient(options.Value.ConnectionString);
-        _eventContext = mongoClient.GetDatabase(options.Value.DatabaseName)
-            .GetCollection<Models.Event>(options.Value.CollectionName);
+        _mongoDb = mongoDb;
     }
 
     public async Task<Guid> Handle(EventUpdateCommand request, CancellationToken cancellationToken)
     {
-        var selectedEvent = (await _eventContext.Find(e => e.Id == request.Id).ToListAsync(cancellationToken)).First();
+        var selectedEvent = (await _mongoDb.DbCollection.Find(e => e.Id == request.Id).ToListAsync(cancellationToken)).First();
 
         selectedEvent.UpdateEvent(request);
 
-        await _eventContext.ReplaceOneAsync(e=>e.Id == selectedEvent.Id, selectedEvent, cancellationToken: cancellationToken);
+        await _mongoDb.DbCollection.ReplaceOneAsync(e=>e.Id == selectedEvent.Id, selectedEvent, cancellationToken: cancellationToken);
 
         return request.Id;
     }

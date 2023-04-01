@@ -10,26 +10,25 @@ namespace ST.Services.Payment.Controllers;
 [Authorize]
 public class PaymentsController : ControllerBase
 {
-    private readonly IPaymentSingleton _paymentInstance;
+    private readonly IPaymentsSingleton _paymentsInstance;
 
-    public PaymentsController(IPaymentSingleton paymentInstance)
+    public PaymentsController(IPaymentsSingleton paymentsInstance)
     {
-        _paymentInstance = paymentInstance;
+        _paymentsInstance = paymentsInstance;
     }
 
     [HttpPost]
     public async Task<IActionResult> CreatePayment(CancellationToken cancellationToken)
     {
-        var transactionId = _paymentInstance.AddTransactionToPool(cancellationToken);
+        var transactionId = _paymentsInstance.AddTransactionToPool(cancellationToken);
 
         return await Task.FromResult(Ok(transactionId));
     }
 
-    [HttpPut("/{transactionId:guid}/state={state:int}")]
+    [HttpPut("/{transactionId:guid}/{state:int}")]
     public async Task<IActionResult> ChangePaymentState([FromRoute] Guid transactionId, [FromRoute] int state, CancellationToken cancellationToken)
     {
-        _paymentInstance.ChangePaymentState((PaymentState) state, transactionId, cancellationToken);
-
+        _paymentsInstance.ChangePaymentState((PaymentState) state, transactionId, cancellationToken);
         return await Task.FromResult(Ok());
     }
 }

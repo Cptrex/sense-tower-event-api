@@ -18,6 +18,11 @@ services:
       environment:
          - RABBITMQ_DEFAULT_USER=guest
          - RABBITMQ_DEFAULT_PASS=guest
+      healthcheck:
+        test: rabbitmq-diagnostics -q ping
+        interval: 30s
+        timeout: 30s
+        retries: 3
    st-image:
       image: cptrex/st-service-image
       ports:
@@ -26,6 +31,12 @@ services:
          - rabbitmq
       networks:
          - stnetworkapi
+      environment:
+         - ServiceEndpoints__TokenAuthorization = ""
+         - ServiceEndpoints__RabbitMQ__Hostname = "rabbitmq"
+         - ServiceEndpoints__RabbitMQ__Port = "5672"
+         - ServiceEndpoints__RabbitMQ__User = "guest"
+         - ServiceEndpoints__RabbitMQ__Password = "guest"
    st-space:
       image: cptrex/st-service-space
       ports:
@@ -34,6 +45,12 @@ services:
          - rabbitmq
       networks:
          - stnetworkapi
+      environment:
+         - ServiceEndpoints__TokenAuthorization = ""
+         - ServiceEndpoints__RabbitMQ__Hostname = "rabbitmq"
+         - ServiceEndpoints__RabbitMQ__Port = "5672"
+         - ServiceEndpoints__RabbitMQ__User = "guest"
+         - ServiceEndpoints__RabbitMQ__Password = "guest"
 networks:
    stnetworkapi:
       name: stnetworkapi

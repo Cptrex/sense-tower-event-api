@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
 using Polly;
-using ST.Services.Image.Extensions.Middleware;
-using ST.Services.Image.Extensions.Services;
+using ST.Services.Image;
 using ST.Services.Image.Interfaces;
+using ST.Services.Image.Middleware;
 using ST.Services.Image.Models;
-using ST.Services.Image.Repository;
+using ST.Services.Image.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +24,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddHttpClient<IImageRepository, ImageRepository>(client =>
+builder.Services.AddHttpClient<IImageServiceManager, ImageServiceManager>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:EventServiceURL"] ?? string.Empty);
     client.DefaultRequestHeaders.Add("Accept", "application/json");
@@ -38,7 +38,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 
 builder.Services.AddSingleton<IImageSingleton, ImageSingleton>();
-builder.Services.AddTransient<IImageRepository, ImageRepository>();
+builder.Services.AddTransient<IImageServiceManager, ImageServiceManager>();
 
 var app = builder.Build();
 
@@ -50,8 +50,6 @@ app.UseCors(b =>
 });
 
 IdentityModelEventSource.ShowPII = true;
-
-app.UseHsts();
 
 app.UseRouting();
 

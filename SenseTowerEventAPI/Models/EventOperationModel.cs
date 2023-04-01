@@ -1,4 +1,4 @@
-﻿using SenseTowerEventAPI.Utils;
+﻿using SenseTowerEventAPI.Features.Event;
 
 namespace SenseTowerEventAPI.Models;
 

@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
 using Polly;
-using ST.Services.Space.Extensions.Middleware;
-using ST.Services.Space.Extensions.Services;
+using ST.Services.Space;
 using ST.Services.Space.Interfaces;
+using ST.Services.Space.Middleware;
 using ST.Services.Space.Models;
-using ST.Services.Space.Repository;
-
+using ST.Services.Space.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +24,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddHttpClient<ISpaceRepository, SpaceRepository>(client =>
+builder.Services.AddHttpClient<ISpaceServiceManager, SpaceServiceManager>(client =>
     {
         client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:EventServiceURL"] ?? string.Empty);
         client.DefaultRequestHeaders.Add("Accept", "application/json");
@@ -39,7 +38,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 
 builder.Services.AddSingleton<ISpaceSingleton, SpaceSingleton>();
-builder.Services.AddTransient<ISpaceRepository, SpaceRepository>();
+builder.Services.AddTransient<ISpaceServiceManager, SpaceServiceManager>();
 
 var app = builder.Build();
 
@@ -51,8 +50,6 @@ app.UseCors(b =>
 });
 
 IdentityModelEventSource.ShowPII = true;
-
-app.UseHsts();
 
 app.UseRouting();
 

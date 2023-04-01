@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using MediatR;
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Swashbuckle.AspNetCore.Annotations;
 #pragma warning disable CS8618
@@ -17,7 +16,6 @@ public class EventCreateCommand : IRequest<Guid>
     /// Уникальный идентификатор мероприятия
     /// </summary>
     [BsonId]
-    [BsonRepresentation(BsonType.String)]
     public Guid Id { get; set; }
     /// <summary>
     /// Название мероприятия

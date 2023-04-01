@@ -1,6 +1,4 @@
-﻿using ST.Services.Space.Utils;
-
-namespace ST.Services.Space.Models;
+﻿namespace ST.Services.Space.Models;
 
 public class EventOperationModel
 {

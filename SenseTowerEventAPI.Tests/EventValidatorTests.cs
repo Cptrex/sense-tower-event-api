@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
+using SenseTowerEventAPI.Features.Event;
 using SenseTowerEventAPI.Interfaces;
 using SenseTowerEventAPI.Models;
-using SenseTowerEventAPI.Repository.EventRepository;
 
 namespace SenseTowerEventAPI.UnitTests;
 
@@ -10,14 +10,14 @@ public class EventValidatorRepositoryTests
 {
 #pragma warning disable CS8618
     private IEventSingleton _eventInstance;
-    private IEventValidatorRepository _eventValidatorRepository;
+    private IEventValidatorManager _eventValidatorRepository;
 #pragma warning restore CS8618
 
     [SetUp]
     public void SetUp()
     {
         _eventInstance = new EventSingleton();
-        _eventValidatorRepository = new EventValidatorRepository();
+        _eventValidatorRepository = new EventValidatorManager();
 
         _eventInstance.Images = new List<Guid>
         {

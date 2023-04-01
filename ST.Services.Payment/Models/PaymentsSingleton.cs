@@ -4,7 +4,7 @@ using ST.Services.Payment.Interfaces;
 
 namespace ST.Services.Payment.Models;
 
-public class PaymentsSingleton : IPaymentSingleton
+public class PaymentsSingleton : IPaymentsSingleton
 {
     public List<PaymentsTransaction> PaymentTransactions { get; set; } = new();
 

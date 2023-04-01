@@ -31,7 +31,7 @@ builder.Services.AddHttpClient("",client =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 
-builder.Services.AddSingleton<IPaymentSingleton, PaymentsSingleton>();
+builder.Services.AddSingleton<IPaymentsSingleton, PaymentsSingleton>();
 
 var app = builder.Build();
 
@@ -41,8 +41,6 @@ app.UseCors(b =>
 });
 
 IdentityModelEventSource.ShowPII = true;
-
-app.UseHsts();
 
 app.UseRouting();
 
