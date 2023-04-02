@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
-using MediatR;
-using MongoDB.Bson.Serialization.Attributes;
+using SenseTowerEventAPI.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 #pragma warning disable CS8618
 
@@ -10,12 +9,11 @@ namespace SenseTowerEventAPI.Features.Event.EventCreate;
 /// Модель команды создания мероприятия
 /// </summary>
 [SwaggerSchema("Модель команды создания мероприятия")]
-public class EventCreateCommand : IRequest<Guid>
+public class EventCreateCommand : ICommand<Guid>
 {
     /// <summary>
     /// Уникальный идентификатор мероприятия
     /// </summary>
-    [BsonId]
     public Guid Id { get; set; }
     /// <summary>
     /// Название мероприятия

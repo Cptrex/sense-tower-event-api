@@ -6,7 +6,7 @@ namespace SenseTowerEventAPI.Features.Event.EventCreate;
 
 public class EventCreateValidator : AbstractValidator<EventCreateCommand>
 {
-    public EventCreateValidator(IEventSingleton _eventInstance, IEventValidatorManager _eventValidatorRepository)
+    public EventCreateValidator(IEventValidatorManager _eventValidatorRepository)
     {
         RuleFor(e => e.EndDate)
             .NotNull().NotEmpty().WithMessage("EndDate не может быть пустым");
@@ -25,7 +25,7 @@ public class EventCreateValidator : AbstractValidator<EventCreateCommand>
         RuleFor(e => e.Description).MaximumLength(10);
         RuleFor(e => e.Description).Must(e => e.Contains("s")).WithMessage("Описание должно содержать s");
 
-        RuleFor(e => e.ImageId).NotNull().Must(e => _eventValidatorRepository.IsImageIdExist(_eventInstance, e)).WithMessage("Такого изображения не существует");
-        RuleFor(e => e.SpaceId).NotNull().Must(e => _eventValidatorRepository.IsSpaceIdExist(_eventInstance, e)).WithMessage("Такого пространства не существует");
+        RuleFor(e => e.ImageId).NotNull().Must(_eventValidatorRepository.IsImageIdExist).WithMessage("Такого изображения не существует");
+        RuleFor(e => e.SpaceId).NotNull().Must(_eventValidatorRepository.IsSpaceIdExist).WithMessage("Такого пространства не существует");
     }
 }

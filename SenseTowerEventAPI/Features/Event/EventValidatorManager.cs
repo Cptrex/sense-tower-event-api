@@ -1,16 +1,36 @@
-﻿using SenseTowerEventAPI.Interfaces;
+﻿using Newtonsoft.Json;
+using SenseTowerEventAPI.Interfaces;
 
 namespace SenseTowerEventAPI.Features.Event;
 
 public class EventValidatorManager : IEventValidatorManager
 {
-    public bool IsImageIdExist(IEventSingleton eventInstance, Guid imageId)
+    private readonly HttpClient _httpImageServiceClient;
+    private readonly HttpClient _httpSpaceServiceClient;
+    private readonly IConfiguration _configuration;
+
+    public EventValidatorManager(IHttpClientFactory httpFactory, IConfiguration configuration)
     {
-        return eventInstance.Images.Contains(imageId);
+        _configuration = configuration;
+        _httpImageServiceClient = httpFactory.CreateClient("imageService");
+        _httpSpaceServiceClient = httpFactory.CreateClient("spaceService");
     }
 
-    public bool IsSpaceIdExist(IEventSingleton eventInstance, Guid spaceId)
+    public bool IsImageIdExist(Guid imageId)
     {
-        return eventInstance.Spaces.Contains(spaceId);
+        var response = _httpImageServiceClient.GetStringAsync(new Uri($"{_configuration["ImageService:URL"]}/images/{imageId}")).Result;
+
+        var isImageExist = JsonConvert.DeserializeObject<bool>(response);
+        
+        return isImageExist;
+    }
+
+    public bool IsSpaceIdExist(Guid spaceId)
+    {
+        var response = _httpSpaceServiceClient.GetStringAsync(new Uri($"{_configuration["SpaceService:URL"]}/spaces/{spaceId}")).Result;
+
+        var isSpaceExist = JsonConvert.DeserializeObject<bool>(response);
+
+        return isSpaceExist;
     }
 }

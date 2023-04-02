@@ -1,5 +1,4 @@
-﻿using FluentValidation.Results;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SC.Internship.Common.ScResult;
@@ -7,22 +6,21 @@ using SenseTowerEventAPI.Features.Event.EventCreate;
 using SenseTowerEventAPI.Features.Event.EventDelete;
 using SenseTowerEventAPI.Features.Event.EventGetList;
 using SenseTowerEventAPI.Features.Event.EventUpdate;
-using SenseTowerEventAPI.Interfaces;
+using SenseTowerEventAPI.Filters;
 
 namespace SenseTowerEventAPI.Features.Event;
 
 [ApiController]
 [Authorize]
 [Route("[controller]")]
+[ServiceFilter(typeof(StValidationFilter))]
 public class EventController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly IEventCreateValidatorBehavior _validator;
 
-    public EventController(IMediator mediator, IEventCreateValidatorBehavior validator)
+    public EventController(IMediator mediator)
     {
         _mediator = mediator;
-        _validator = validator;
     }
 
     /// <summary>
@@ -33,14 +31,13 @@ public class EventController : ControllerBase
     /// <returns>Возвращает HTTP Response Code</returns>
     /// <remarks> GUID для проверки валидации ImageID и SpaceID 3fa85f64-5717-4562-b3fc-2c963f66afa6</remarks>
     [HttpPost]
-    public async Task<ScResult<ValidationResult>> CreateEvent(EventCreateCommand cmd, CancellationToken cancellationToken)
+    public async Task<ScResult> CreateEvent(EventCreateCommand cmd, CancellationToken cancellationToken)
     {
-        if (ModelState.IsValid == false) return new ScResult<ValidationResult> { Error = new ScError { Message = "Ошибка передачи данных" } };
+        if (ModelState.IsValid == false) return new ScResult { Error = new ScError { Message = "Ошибка передачи данных" } };
 
-        var result = _validator.Validate(cmd);
         await _mediator.Send(cmd, cancellationToken);
 
-        return new ScResult<ValidationResult>(result);
+        return new ScResult();
     }
 
     /// <summary>
@@ -52,7 +49,7 @@ public class EventController : ControllerBase
     [HttpDelete("/{eventId:guid}")]
     public async Task<ScResult> DeleteEvent([FromRoute] Guid eventId, CancellationToken cancellationToken)
     {
-        if (ModelState.IsValid == false) return new ScResult { Error = new ScError { Message = "Ошибка передачи данных" }};
+        if (ModelState.IsValid == false) return new ScResult { Error = new ScError { Message = "Возникла ошибка передачи данных" }};
 
         var cmd = new EventDeleteCommand { Id = eventId };
         await _mediator.Send(cmd, cancellationToken);

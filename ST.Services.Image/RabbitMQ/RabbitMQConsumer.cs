@@ -9,13 +9,13 @@ using ST.Services.Image.Models;
 
 namespace ST.Services.Image.RabbitMQ;
 
-public class RabbitMQConsumerService : BackgroundService
+public class RabbitMQConsumer : BackgroundService
 {
     private readonly IConnection _connection;
     private readonly IModel _channel;
     private readonly IImageServiceManager _imageServiceManager;
 
-    public RabbitMQConsumerService(IImageServiceManager imgServiceManager, IConfiguration config)
+    public RabbitMQConsumer(IImageServiceManager imgServiceManager, IConfiguration config)
     {
         try
         {

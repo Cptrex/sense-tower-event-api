@@ -32,7 +32,7 @@ public class RequestResponseLoggingMiddleware
                                $"Host: {context.Request.Host} " +
                                $"Path: {context.Request.Path} " +
                                $"QueryString: {context.Request.QueryString} " +
-                               $"Request Body: {ReadStreamInChunks(requestStream)}" +
+                              // $"Request Body: {ReadStreamInChunks(requestStream)}" +
                                $"{Environment.NewLine}" +
                                "__________________________________________________________________________________");
 
@@ -57,7 +57,7 @@ public class RequestResponseLoggingMiddleware
                                $"Host: {context.Request.Host} " +
                                $"Path: {context.Request.Path} " +
                                $"QueryString: {context.Request.QueryString} " +
-                               $"Response Body: {text}" +
+                             //  $"Response Body: {text}" +
                                $"{Environment.NewLine}" +
                                "__________________________________________________________________________________");
 

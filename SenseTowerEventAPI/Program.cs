@@ -15,8 +15,11 @@ using SenseTowerEventAPI.MongoDB.Context;
 using SenseTowerEventAPI.MongoDB;
 using SenseTowerEventAPI.Features.Ticket;
 using SenseTowerEventAPI.Features.Event;
+using SenseTowerEventAPI.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHostedService<RabbitMQConsumer>();
 
 builder.Services.AddAuthentication(options =>
     {
@@ -32,16 +35,36 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddHttpClient<ITicketManager, TicketManager>(client =>
+builder.Services.AddHttpClient<ITicketManager, TicketManager>("paymentService",client =>
     {
-        client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:PaymentServiceURL"] ?? string.Empty);
+        client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:PaymentService:URL"] ?? string.Empty);
         client.DefaultRequestHeaders.Add("Accept", "application/json");
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {builder.Configuration["ServiceEndpoints:TokenAuthorization"]}");
     })
     .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2)))
     .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(10)));
 
-builder.Services.AddControllers();
+builder.Services.AddHttpClient<ITicketManager, TicketManager>("imageService", client =>
+    {
+        client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:ImageService:URL"] ?? string.Empty);
+        client.DefaultRequestHeaders.Add("Accept", "application/json");
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {builder.Configuration["ServiceEndpoints:TokenAuthorization"]}");
+    })
+    .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2)))
+    .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(10)));
+
+builder.Services.AddHttpClient<ITicketManager, TicketManager>("spaceService", client =>
+    {
+        client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:SpaceService:URL"] ?? string.Empty);
+        client.DefaultRequestHeaders.Add("Accept", "application/json");
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {builder.Configuration["ServiceEndpoints:TokenAuthorization"]}");
+    })
+    .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2)))
+    .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(10)));
+
+builder.Services.AddScoped<StValidationFilter>();
+
+builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddValidatorsFromAssemblyContaining<EventCreateValidator>();
 
@@ -96,12 +119,16 @@ builder.Services.AddSingleton<IEventValidatorManager, EventValidatorManager>();
 builder.Services.AddSingleton<ITicketManager, TicketManager>();
 builder.Services.AddSingleton<IMongoDBCommunicator, MongoDBCommunicator>();
 
+builder.Services.AddSingleton<IRabbitMQConfigure, RabbitMQConfigure>();
+
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
 var app = builder.Build();
 
 app.UseMiddleware<RequestResponseLoggingMiddleware>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseCors(b => b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 

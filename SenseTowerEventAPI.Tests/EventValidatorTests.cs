@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.Extensions.Configuration;
+using NUnit.Framework;
 using SenseTowerEventAPI.Features.Event;
 using SenseTowerEventAPI.Interfaces;
 using SenseTowerEventAPI.Models;
@@ -17,9 +18,11 @@ public class EventValidatorRepositoryTests
     public void SetUp()
     {
         _eventInstance = new EventSingleton();
-        _eventValidatorRepository = new EventValidatorManager();
+        IHttpClientFactory iHttpClientFactory = null;
+        IConfiguration iconfiguration = null;
+        _eventValidatorRepository = new EventValidatorManager(iHttpClientFactory, iconfiguration);
 
-        _eventInstance.Images = new List<Guid>
+       /* _eventInstance.Images = new List<Guid>
         {
             new("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
             new("4fa85f64-5717-4562-b3fc-2c963f66afa6"),
@@ -31,14 +34,14 @@ public class EventValidatorRepositoryTests
             new("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
             new("4fa85f64-5717-4562-b3fc-2c963f66afa6"),
             new("5fa85f64-5717-4562-b3fc-2c963f66afa6")
-        };
+        };*/
     }
 
     [Test]
     public void IsImageGuidExist_Should_Return_False()
     {
         var findImageGuid = new Guid("22a85f64-5717-4562-b3fc-2c963f66afa6");
-        var result = _eventValidatorRepository.IsImageIdExist(_eventInstance, findImageGuid);
+        var result = _eventValidatorRepository.IsImageIdExist(findImageGuid);
         Assert.That(result, Is.False);
     }
 
@@ -46,7 +49,7 @@ public class EventValidatorRepositoryTests
     public void IsImageGuidExist_Should_Return_True()
     {
         var findImageGuid = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-        var result = _eventValidatorRepository.IsImageIdExist(_eventInstance, findImageGuid);
+        var result = _eventValidatorRepository.IsImageIdExist(findImageGuid);
         Assert.That(result, Is.True);
     }
 
@@ -54,7 +57,7 @@ public class EventValidatorRepositoryTests
     public void IsSpaceGuidExist_Should_Return_True()
     {
         var findSpaceGuid = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-        var result = _eventValidatorRepository.IsSpaceIdExist(_eventInstance, findSpaceGuid);
+        var result = _eventValidatorRepository.IsSpaceIdExist(findSpaceGuid);
         Assert.That(result, Is.True);
     }
 
@@ -62,7 +65,7 @@ public class EventValidatorRepositoryTests
     public void IsSpaceGuidExist_Should_Return_False()
     {
         var findSpaceGuid = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-        var result = _eventValidatorRepository.IsSpaceIdExist(_eventInstance, findSpaceGuid);
+        var result = _eventValidatorRepository.IsSpaceIdExist(findSpaceGuid);
         Assert.That(result, Is.True);
     }
 }

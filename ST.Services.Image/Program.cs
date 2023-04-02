@@ -9,7 +9,7 @@ using ST.Services.Image.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHostedService<RabbitMQConsumerService>();
+builder.Services.AddHostedService<RabbitMQConsumer>();
 
 builder.Services.AddAuthentication(options =>
 {

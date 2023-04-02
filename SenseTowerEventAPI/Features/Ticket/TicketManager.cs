@@ -1,27 +1,20 @@
-﻿using Microsoft.Extensions.Options;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using SenseTowerEventAPI.Interfaces;
 using System.Text;
 using Newtonsoft.Json;
 using SC.Internship.Common.ScResult;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using SenseTowerEventAPI.MongoDB.Context;
 
 namespace SenseTowerEventAPI.Features.Ticket;
 
 public class TicketManager : ITicketManager
 {
     private readonly IMongoCollection<Models.Event> _eventContext;
-    private readonly HttpClient _httpClient;
-    private readonly IConfiguration _configuration;
+    private readonly HttpClient _httpPaymentServiceClient;
 
-    public TicketManager(HttpClient httpClient, IOptions<EventContext> options, IConfiguration configuration)
+    public TicketManager(IHttpClientFactory httpClientFactory, IMongoDBCommunicator mongoDb)
     {
-        _configuration = configuration;
-        _httpClient = httpClient;
-        var mongoClient = new MongoClient(options.Value.ConnectionString);
-        _eventContext = mongoClient.GetDatabase(options.Value.DatabaseName)
-            .GetCollection<Models.Event>(options.Value.CollectionName);
+        _eventContext = mongoDb.DbCollection;
+        _httpPaymentServiceClient = httpClientFactory.CreateClient("paymentService");
     }
 
     public async Task<List<Models.Ticket>> GetAllEventTickets(Guid eventId)
@@ -42,9 +35,9 @@ public class TicketManager : ITicketManager
     public async Task<Guid> CreateTicketPayment()
     {
         HttpContent content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
-        content.Headers.Add("Authorization", $"{JwtBearerDefaults.AuthenticationScheme} {_configuration["ServiceEndpoints:TokenAuthorization"]}");
 
-        var result = await _httpClient.PostAsync(new Uri($"{_configuration["ServiceEndpoints:ImageServiceURL"]}/payment"), content);
+        var result = await _httpPaymentServiceClient.PostAsync("/payments", content);
+
         var response = JsonConvert.DeserializeObject<ScResult<Guid>>(await result.Content.ReadAsStringAsync());
 
         if (response is null) return Guid.Empty;
@@ -59,9 +52,7 @@ public class TicketManager : ITicketManager
         var payload = JsonConvert.SerializeObject(createdTransactionId);
         HttpContent content = new StringContent(payload, Encoding.UTF8, "application/json");
 
-        content.Headers.Add("Authorization", $"{JwtBearerDefaults.AuthenticationScheme} {_configuration["ServiceEndpoints:TokenAuthorization"]}");
-
-        await _httpClient.PatchAsync(new Uri($"{_configuration["ServiceEndpoints:ImageServiceURL"]}/payment"), content);
+        await _httpPaymentServiceClient.PutAsync("/payments", content);
     }
 
     public async Task ConfirmTicketPayment(Guid createdTransactionId)
@@ -69,8 +60,6 @@ public class TicketManager : ITicketManager
         var payload = JsonConvert.SerializeObject(createdTransactionId);
         HttpContent content = new StringContent(payload, Encoding.UTF8, "application/json");
 
-        content.Headers.Add("Authorization", $"{JwtBearerDefaults.AuthenticationScheme} {_configuration["ServiceEndpoints:TokenAuthorization"]}");
-
-        await _httpClient.PutAsync(new Uri($"{_configuration["ServiceEndpoints:ImageServiceURL"]}/payment"), content);
+        await _httpPaymentServiceClient.PutAsync("/payments", content);
     }
 }

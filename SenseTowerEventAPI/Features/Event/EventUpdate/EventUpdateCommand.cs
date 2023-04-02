@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using SenseTowerEventAPI.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 #pragma warning disable CS8618
 
@@ -8,7 +8,7 @@ namespace SenseTowerEventAPI.Features.Event.EventUpdate;
 /// Модель команды обновления мероприятия
 /// </summary>
 [SwaggerSchema("Модель команды обновления мероприятия")]
-public class EventUpdateCommand : IRequest<Guid>
+public class EventUpdateCommand : ICommand<Guid>
 {
     /// <summary>
     /// Уникальный идентификатор мероприятия

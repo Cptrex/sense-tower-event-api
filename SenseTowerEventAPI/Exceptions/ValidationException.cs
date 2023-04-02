@@ -7,7 +7,7 @@ namespace SenseTowerEventAPI.Exceptions;
 public sealed class ValidationException : ScException
 {
     public ValidationException(IReadOnlyDictionary<string, string[]> errorsDictionary)
-        : base("Произошла ошибка!")
+        : base( "Обнаружена одна или несколько ошибок валидации")
         => ErrorsDictionary = errorsDictionary;
 
     public IReadOnlyDictionary<string, string[]> ErrorsDictionary { get; }
