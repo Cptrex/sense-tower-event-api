@@ -1,4 +1,5 @@
-﻿using Microsoft.IO;
+﻿using JetBrains.Annotations;
+using Microsoft.IO;
 
 namespace SenseTowerEventAPI.Middleware;
 public class RequestResponseLoggingMiddleware
@@ -49,7 +50,7 @@ public class RequestResponseLoggingMiddleware
         await _next(context);
 
         context.Response.Body.Seek(0, SeekOrigin.Begin);
-        var text = await new StreamReader(context.Response.Body).ReadToEndAsync();
+        //var text = await new StreamReader(context.Response.Body).ReadToEndAsync();
         context.Response.Body.Seek(0, SeekOrigin.Begin);
 
         _logger.LogInformation($"[HTTP RESPONSE INFORMATION]:{Environment.NewLine}" +
@@ -64,6 +65,7 @@ public class RequestResponseLoggingMiddleware
         await responseBody.CopyToAsync(originalBodyStream);
     }
 
+    [UsedImplicitly]
     private static string ReadStreamInChunks(Stream stream)
     {
         const int readChunkBufferLength = 4096;

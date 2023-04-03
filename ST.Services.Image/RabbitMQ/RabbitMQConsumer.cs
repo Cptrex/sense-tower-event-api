@@ -15,44 +15,22 @@ public class RabbitMQConsumer : BackgroundService
     private readonly IModel _channel;
     private readonly IImageServiceManager _imageServiceManager;
 
-    public RabbitMQConsumer(IImageServiceManager imgServiceManager, IConfiguration config)
+    public RabbitMQConsumer(IRabbitMQConfigure rabbitMqConfigure, IImageServiceManager imageServiceManager)
     {
         try
         {
-            foreach (var pair in config.GetChildren())
-            {
-                Console.WriteLine($"{pair.Path} - {pair.Value}");
-            }
-            _imageServiceManager = imgServiceManager;
+            _imageServiceManager = imageServiceManager;
+            _connection = rabbitMqConfigure.GetRabbitMQConnection();
+            _channel = rabbitMqConfigure.GetRabbitMQChannel();
 
-            var IsRunningInContainer = bool.TryParse(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"), out var inDocker) && inDocker;
-            var address = IsRunningInContainer ? "rabbitmq" : "localhost";
-
-            var port = Environment.GetEnvironmentVariable("ServiceEndpoints");
-            //var address = config["ServiceEndpoints:EventServiceURL"];
-            //var port = Convert.ToInt32(config["ServiceEndpoints:EventServicePort"]);
-            var username = "guest";
-            var password = "guest";
-
-            var factory = new ConnectionFactory
-            {
-                HostName = address,
-                Port = Convert.ToInt32(port),
-                UserName = username,
-                Password = password
-                //Uri = new Uri($"amqp://{username}:{password}@{address}:{port}/"),
-            };
-
-            _connection = factory.CreateConnection();
-            _channel = _connection.CreateModel();
             _channel.QueueDeclare(queue: "image-queue", durable: false, exclusive: false, autoDelete: false, arguments: null);
 
-            Console.WriteLine("[IMAGE SERVICE] listening image-queue started");
+            Console.WriteLine("[EVENT SERVICE] listening image-queue started");
 
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[IMAGE SERVICE] listening image-queue error: {ex}");
+            Console.WriteLine($"[EVENT SERVICE] listening image-queue error: {ex}");
         }
     }
 

@@ -5,12 +5,14 @@ using SC.Internship.Common.ScResult;
 using SenseTowerEventAPI.Features.Ticket.AddTicket;
 using SenseTowerEventAPI.Features.Ticket.CheckTicketUserExist;
 using SenseTowerEventAPI.Features.Ticket.GiveTicketUser;
+using SenseTowerEventAPI.Filters;
 
 namespace SenseTowerEventAPI.Features.Ticket;
 
 [ApiController]
 [Authorize]
 [Route("[controller]")]
+[ServiceFilter(typeof(StValidationFilter))]
 public class TicketController : ControllerBase
 {
     private readonly IMediator _mediator;

@@ -41,7 +41,7 @@ public class EventController : ControllerBase
     }
 
     /// <summary>
-    /// Удалить выбранное мероприятия по GUID
+    /// Удалить выбранное мероприятие по GUID
     /// </summary>
     /// <param name="eventId">GUID мероприятия</param>
     /// <param name="cancellationToken">Токен отмены операции</param>

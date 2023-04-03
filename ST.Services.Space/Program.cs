@@ -9,7 +9,7 @@ using ST.Services.Space.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHostedService<RabbitMQConsumerService>();
+builder.Services.AddHostedService<RabbitMQConsumer>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -39,6 +39,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddSingleton<ISpaceSingleton, SpaceSingleton>();
 builder.Services.AddTransient<ISpaceServiceManager, SpaceServiceManager>();
+
+builder.Services.AddSingleton<IRabbitMQConfigure, RabbitMQConfigure>();
 
 var app = builder.Build();
 

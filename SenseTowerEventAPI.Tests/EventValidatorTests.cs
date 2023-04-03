@@ -20,7 +20,7 @@ public class EventValidatorRepositoryTests
         _eventInstance = new EventSingleton();
         IHttpClientFactory iHttpClientFactory = null;
         IConfiguration iconfiguration = null;
-        _eventValidatorRepository = new EventValidatorManager(iHttpClientFactory, iconfiguration);
+        //_eventValidatorRepository = new EventValidatorManager(iHttpClientFactory, iconfiguration);
 
        /* _eventInstance.Images = new List<Guid>
         {

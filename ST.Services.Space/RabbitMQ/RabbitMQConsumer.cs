@@ -9,41 +9,28 @@ using ST.Services.Space.Models;
 
 namespace ST.Services.Space.RabbitMQ;
 
-public class RabbitMQConsumerService : BackgroundService
+public class RabbitMQConsumer : BackgroundService
 {
     private readonly IConnection _connection;
     private readonly IModel _channel;
-    private readonly ISpaceServiceManager _imageRepository;
+    private readonly ISpaceServiceManager _spaceServiceManager;
 
-    public RabbitMQConsumerService(ISpaceServiceManager imgRepository, IConfiguration config)
+    public RabbitMQConsumer(IRabbitMQConfigure rabbitMqConfigure, ISpaceServiceManager spaceServiceManager)
     {
         try
         {
-            var IsRunningInContainer = bool.TryParse(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"), out var inDocker) && inDocker;
-            var address = IsRunningInContainer ? "rabbitmq" : "localhost";
+            _spaceServiceManager = spaceServiceManager;
+            _connection = rabbitMqConfigure.GetRabbitMQConnection();
+            _channel = rabbitMqConfigure.GetRabbitMQChannel();
 
-            _imageRepository = imgRepository;
+            _channel.QueueDeclare(queue: "space-queue", durable: false, exclusive: false, autoDelete: false, arguments: null);
 
-            //var address = config["ServiceEndpoints:EventServiceURL"];
-            var port = Convert.ToInt32(config["ServiceEndpoints:EventServicePort"]);
-            var username = "guest";
-            var password = "guest";
+            Console.WriteLine("[EVENT SERVICE] listening space-queue started");
 
-            var factory = new ConnectionFactory
-            {
-                Uri = new Uri($"amqp://{username}:{password}@{address}:{port}/"),
-            };
-
-            _connection = factory.CreateConnection();
-            _channel = _connection.CreateModel();
-            _channel.QueueDeclare(queue: "space-queue", durable: false, exclusive: false, autoDelete: false,
-                arguments: null);
-
-            Console.WriteLine("[SPACE SERVICE] listening space-queue started");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[SPACE SERVICE] listening space-queue error : {ex}");
+            Console.WriteLine($"[EVENT SERVICE] listening space-queue error: {ex}");
         }
     }
 
@@ -78,7 +65,7 @@ public class RabbitMQConsumerService : BackgroundService
                 if (eventOperation == null) return;
                 Console.WriteLine($"{DateTimeOffset.Now} | [SPACE SERVICE] received cmd: {eventOperation.Type} objectId: {eventOperation.DeletedId}");
                 if (eventOperation.Type != EventOperationType.SpaceDeleteEvent) return;
-                var operationResult = _imageRepository.DeleteSpaceId(eventOperation.DeletedId, stoppingToken).Result;
+                var operationResult = _spaceServiceManager.DeleteSpaceId(eventOperation.DeletedId, stoppingToken).Result;
 
                 Console.WriteLine(operationResult ?
                     $"{DateTimeOffset.Now} | [SPACE SERVICE] operation result success" : $"{DateTimeOffset.Now} | [SPACE SERVICE] operation result error");

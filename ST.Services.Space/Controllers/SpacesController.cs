@@ -10,8 +10,8 @@ namespace ST.Services.Space.Controllers;
 public class SpacesController : ControllerBase
 {
     [HttpGet("/{spaceId:guid}")]
-    public async Task<ScResult<bool>> IsSpaceExist([FromRoute] Guid spaceId, CancellationToken cancellationToken)
+    public ScResult<bool> IsSpaceExist([FromRoute] Guid spaceId, CancellationToken cancellationToken)
     {
-        return await Task.FromResult(new ScResult<bool>(true));
+        return new ScResult<bool>(true);
     }
 }

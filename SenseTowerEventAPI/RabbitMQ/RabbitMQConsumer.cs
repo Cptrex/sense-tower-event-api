@@ -20,14 +20,10 @@ public class RabbitMQConsumer : BackgroundService
     private readonly IConnection _connection;
     private readonly IMongoDBCommunicator _mongoDb;
 
-    public RabbitMQConsumer(IConfiguration config, IRabbitMQConfigure rabbitMqConfigure, IMongoDBCommunicator mongoDb)
+    public RabbitMQConsumer(IRabbitMQConfigure rabbitMqConfigure, IMongoDBCommunicator mongoDb)
     {
         try
         {
-            foreach (var pair in config.GetChildren())
-            {
-                Console.WriteLine($"{pair.Path} - {pair.Value}");
-            }
             _mongoDb = mongoDb;
             _connection = rabbitMqConfigure.GetRabbitMQConnection();
             _channel = rabbitMqConfigure.GetRabbitMQChannel();
@@ -91,6 +87,7 @@ public class RabbitMQConsumer : BackgroundService
                         _mongoDb.DbCollection.DeleteMany(filter);
                         operationResult = true;
                         break;
+                    case EventOperationType.EventDeleteEvent:
                     default:
                         throw new ScException("Такого события очереди не существует");
                 }

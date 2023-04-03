@@ -9,9 +9,9 @@ namespace ST.Services.Image.Controllers;
 [Authorize]
 public class ImagesController : ControllerBase
 {
-    [HttpGet("/{imageId:guid}")]
-    public async Task<ScResult<bool>> IsImageExist([FromRoute] Guid imageId, CancellationToken cancellationToken)
+    [HttpGet("{imageId:guid}")]
+    public ScResult<bool> IsImageExist([FromRoute] Guid imageId, CancellationToken cancellationToken)
     {
-        return await Task.FromResult(new ScResult<bool>(true));
+        return new ScResult<bool>(true);
     }
 }

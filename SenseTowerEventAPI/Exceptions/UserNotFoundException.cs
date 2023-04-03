@@ -1,5 +1,8 @@
-﻿namespace SenseTowerEventAPI.Exceptions;
+﻿using JetBrains.Annotations;
 
+namespace SenseTowerEventAPI.Exceptions;
+
+[UsedImplicitly]
 public sealed class UserNotFoundException : NotFoundException
 {
     public UserNotFoundException(int userId)

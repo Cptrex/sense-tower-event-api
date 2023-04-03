@@ -33,12 +33,12 @@ builder.Services.AddHttpClient<IImageServiceManager, ImageServiceManager>(client
     .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2)))
     .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(10)));
 
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 
 builder.Services.AddSingleton<IImageSingleton, ImageSingleton>();
 builder.Services.AddTransient<IImageServiceManager, ImageServiceManager>();
+builder.Services.AddSingleton<IRabbitMQConfigure, RabbitMQConfigure>();
 
 var app = builder.Build();
 

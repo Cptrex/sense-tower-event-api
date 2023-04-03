@@ -1,5 +1,4 @@
-﻿using MediatR;
-using SenseTowerEventAPI.Interfaces;
+﻿using SenseTowerEventAPI.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace SenseTowerEventAPI.Features.Event.EventDelete;

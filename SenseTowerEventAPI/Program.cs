@@ -35,7 +35,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddHttpClient<ITicketManager, TicketManager>("paymentService",client =>
+builder.Services.AddHttpClient("paymentService",client =>
     {
         client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:PaymentService:URL"] ?? string.Empty);
         client.DefaultRequestHeaders.Add("Accept", "application/json");
@@ -44,7 +44,7 @@ builder.Services.AddHttpClient<ITicketManager, TicketManager>("paymentService",c
     .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2)))
     .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(10)));
 
-builder.Services.AddHttpClient<ITicketManager, TicketManager>("imageService", client =>
+builder.Services.AddHttpClient("imageService", client =>
     {
         client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:ImageService:URL"] ?? string.Empty);
         client.DefaultRequestHeaders.Add("Accept", "application/json");
@@ -53,7 +53,7 @@ builder.Services.AddHttpClient<ITicketManager, TicketManager>("imageService", cl
     .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2)))
     .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(10)));
 
-builder.Services.AddHttpClient<ITicketManager, TicketManager>("spaceService", client =>
+builder.Services.AddHttpClient("spaceService", client =>
     {
         client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:SpaceService:URL"] ?? string.Empty);
         client.DefaultRequestHeaders.Add("Accept", "application/json");

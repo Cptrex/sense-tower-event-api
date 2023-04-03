@@ -10,8 +10,6 @@ public class StValidationFilter : Attribute, IExceptionFilter
     {
         // only handle ValidationException
         if (context.Exception is not ValidationException) return;
-        var actionName = context.ActionDescriptor.DisplayName;
-        var exceptionStack = context.Exception.StackTrace;
         var exceptionMessage = context.Exception.Message;
 
         context.ExceptionHandled = true;

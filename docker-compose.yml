@@ -40,7 +40,7 @@ services:
    st-space:
       image: cptrex/st-service-space
       ports:
-         - 5030:80
+         - 5040:80
       depends_on:
          - rabbitmq
       networks:
