@@ -6,11 +6,11 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["ST.Services.Payment.csproj", "ST.Services.Payment/"]
+COPY ["ST.Services.Payment/ST.Services.Payment.csproj", "ST.Services.Payment/"]
+COPY ["SC.Internship.Common/SC.Internship.Common/SC.Internship.Common.csproj", "SC.Internship.Common/SC.Internship.Common/"]
 RUN dotnet restore "ST.Services.Payment/ST.Services.Payment.csproj"
-
-WORKDIR "/src/ST.Services.Payment"
 COPY . .
+WORKDIR "/src/ST.Services.Payment"
 RUN dotnet build "ST.Services.Payment.csproj" -c Release -o /app/build
 
 FROM build AS publish

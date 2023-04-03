@@ -13,7 +13,20 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ServiceEndpoints__TokenAuthorization": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjNFQzc5ODA3QTcyMUJDQTdBOTE3NEVFMkNBRTgzM0YxIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2ODA1NDc2MzQsImV4cCI6MTY4MDU1MTIzNCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoibXlBcGkiLCJjbGllbnRfaWQiOiJzZW5zZXRvd2VyLWV2ZW50LWFwaSIsImp0aSI6IjNBMUE2NUY0NTJBMzNGNkY4NUJEMzc5QUM2RDQ0MDcyIiwiaWF0IjoxNjgwNTQ3NjM0LCJzY29wZSI6WyJteUFwaS5yZWFkIl19.nqUtjBVXYlCII5H_lkm73UxgMpeBHWabbtIbOoL89ten_JkFGcrzX5brHejcHm7kFKD7DGz3z_Fsm_kXBp57QN4ko27lUyFni_qhc6_SmqdXK6STTDTq3qYgNHC8qww9Uxjn9RO3LjM5ubnwnSlZJ7iOR16LBBeOecFfvNOdMZDvsFDgCDoe3rHHj9GBhnONmg1WyXp2Es5l49z3OS9kY5-A4Cy-NXdoDrkvliPwLzxmJQ1thJT3L_jh37ywGwceya8VfSuYLRKEovIxAHuJl4VSubkse3Uj6ODWIDch-eq0uGS9PJRfTac_OXLBgarJ_c3bO-f3UXebeSuz3BPr8g",
+        "ServiceEndpoints__PaymentService__URL": "http://localhost:5080",
+        "ServiceEndpoints__ImageService__URL": "http://localhost:5020",
+        "ServiceEndpoints__SpaceService__URL": "http://localhost:5040",
+        "ServiceEndpoints__RabbitMQ__Hostname": "localhost",
+        "ServiceEndpoints__RabbitMQ__Port": "5672",
+        "ServiceEndpoints__RabbitMQ__User": "guest",
+        "ServiceEndpoints__RabbitMQ__Password": "guest",
+        "IdentityServer4Settings__Authority": "http://localhost:5001",
+        "IdentityServer4Settings__Audience": "myApi",
+        "EventsDatabaseSettings__ConnectionString": "mongodb://localhost:7000/",
+        "EventsDatabaseSettings__DatabaseName": "STEventsApiDB",
+        "EventsDatabaseSettings__CollectionName": "Events"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5030"

@@ -6,11 +6,11 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["ST.Services.Image.csproj", "ST.Services.Image/"]
+COPY ["ST.Services.Image/ST.Services.Image.csproj", "ST.Services.Image/"]
+COPY ["SC.Internship.Common/SC.Internship.Common/SC.Internship.Common.csproj", "SC.Internship.Common/SC.Internship.Common/"]
 RUN dotnet restore "ST.Services.Image/ST.Services.Image.csproj"
-
-WORKDIR "/src/ST.Services.Image"
 COPY . .
+WORKDIR "/src/ST.Services.Image"
 RUN dotnet build "ST.Services.Image.csproj" -c Release -o /app/build
 
 FROM build AS publish

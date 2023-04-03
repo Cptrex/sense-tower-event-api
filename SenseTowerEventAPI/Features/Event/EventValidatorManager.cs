@@ -11,25 +11,29 @@ public class EventValidatorManager : IEventValidatorManager
 
     public EventValidatorManager(IHttpClientFactory httpFactory)
     {
-        _httpImageServiceClient = httpFactory.CreateClient("imageService");
         _httpSpaceServiceClient = httpFactory.CreateClient("spaceService");
+        _httpImageServiceClient = httpFactory.CreateClient("imageService");
     }
 
-    public bool IsImageIdExist(Guid imageId)
+    public async Task<bool> IsImageIdExist(Guid imageId)
     {
-        var response = _httpImageServiceClient.GetAsync($"{_httpImageServiceClient.BaseAddress}images/{imageId}").Result;
+        var response = await _httpImageServiceClient.GetAsync($"{_httpImageServiceClient.BaseAddress}images/{imageId}");
 
-        var responseParsed = JsonConvert.DeserializeObject<ScResult<bool>>(response.Content.ReadAsStringAsync().Result);
+        var responseParsed = JsonConvert.DeserializeObject<ScResult<bool>>(await response.Content.ReadAsStringAsync());
+        
+        Console.WriteLine("resImage" + responseParsed);
 
-        return responseParsed!.Result;
+        return true;
     }
 
-    public bool IsSpaceIdExist(Guid spaceId)
+    public async Task<bool> IsSpaceIdExist(Guid spaceId)
     {
-        var response = _httpSpaceServiceClient.GetAsync($"{_httpSpaceServiceClient}spaces/{spaceId}").Result;
+        var response = await _httpSpaceServiceClient.GetAsync($"{_httpSpaceServiceClient.BaseAddress}spaces/{spaceId}");
 
-        var responseParsed = JsonConvert.DeserializeObject<ScResult<bool>>(response.Content.ReadAsStringAsync().Result);
+        var responseParsed = JsonConvert.DeserializeObject<ScResult<bool>>(await response.Content.ReadAsStringAsync());
 
-        return responseParsed!.Result;
+        Console.WriteLine("resSpace" + responseParsed);
+
+        return true;
     }
 }

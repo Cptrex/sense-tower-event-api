@@ -1,8 +1,6 @@
-﻿using Microsoft.Extensions.Options;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using SenseTowerEventAPI.Interfaces;
 using SenseTowerEventAPI.Models;
-using SenseTowerEventAPI.MongoDB.Context;
 
 namespace SenseTowerEventAPI.MongoDB;
 
@@ -10,10 +8,14 @@ public class MongoDBCommunicator : IMongoDBCommunicator
 {
     public IMongoCollection<Event> DbCollection { get; set; }
 
-    public MongoDBCommunicator(IOptions<EventContext> options)
+    public MongoDBCommunicator()
     {
-        var mongoClient = new MongoClient(options.Value.ConnectionString);
-        DbCollection = mongoClient.GetDatabase(options.Value.DatabaseName)
-            .GetCollection<Event>(options.Value.CollectionName);
+        var database = Environment.GetEnvironmentVariable("EventsDatabaseSettings__DatabaseName");
+        var collection = Environment.GetEnvironmentVariable("EventsDatabaseSettings__CollectionName");
+        var connectionString = Environment.GetEnvironmentVariable("EventsDatabaseSettings__ConnectionString");
+        var mongoClient = new MongoClient(connectionString);
+       
+        DbCollection = mongoClient.GetDatabase(database)
+            .GetCollection<Event>(collection);
     }
 }

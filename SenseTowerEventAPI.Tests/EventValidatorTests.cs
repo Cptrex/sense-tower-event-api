@@ -1,71 +1,59 @@
-﻿using Microsoft.Extensions.Configuration;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SenseTowerEventAPI.Features.Event;
+using SenseTowerEventAPI.Features.Event.EventCreate;
 using SenseTowerEventAPI.Interfaces;
-using SenseTowerEventAPI.Models;
+using Moq;
+#pragma warning disable CS8618
 
 namespace SenseTowerEventAPI.UnitTests;
 
 [TestFixture]
-public class EventValidatorRepositoryTests
+public class EventValidatorTests
 {
-#pragma warning disable CS8618
-    private IEventSingleton _eventInstance;
-    private IEventValidatorManager _eventValidatorRepository;
-#pragma warning restore CS8618
+    private EventCreateValidator validator;
 
     [SetUp]
     public void SetUp()
     {
-        _eventInstance = new EventSingleton();
-        IHttpClientFactory iHttpClientFactory = null;
-        IConfiguration iconfiguration = null;
-        //_eventValidatorRepository = new EventValidatorManager(iHttpClientFactory, iconfiguration);
+        var httpClientFactory = new Mock<IHttpClientFactory>();
+        IEventValidatorManager validatorManger = new EventValidatorManager(httpClientFactory.Object);
 
-       /* _eventInstance.Images = new List<Guid>
+        validator = new EventCreateValidator(validatorManger);
+    }
+
+    [Test]
+    public void Does_EventCreateCommandModel_Title_Have_letter_s()
+    {
+        EventCreateCommand cmd = new()
         {
-            new("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
-            new("4fa85f64-5717-4562-b3fc-2c963f66afa6"),
-            new("5fa85f64-5717-4562-b3fc-2c963f66afa6")
+            Id = Guid.NewGuid(),
+            Title = "sep",
+            Description = "desc",
+            EndDate = DateTimeOffset.Now.AddDays(1),
+            StartDate = DateTimeOffset.Now,
+            ImageId = Guid.NewGuid(),
+            SpaceId = Guid.NewGuid()
         };
+        var result = validator.Validate(cmd);
 
-        _eventInstance.Spaces = new List<Guid>
+        Assert.That(result.IsValid, Is.EqualTo(true));
+    }
+
+    [Test]
+    public void Does_EventCreateCommandModel_Title_Have_Minimum_1_symbol()
+    {
+        EventCreateCommand cmd = new()
         {
-            new("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
-            new("4fa85f64-5717-4562-b3fc-2c963f66afa6"),
-            new("5fa85f64-5717-4562-b3fc-2c963f66afa6")
-        };*/
-    }
+            Id = Guid.NewGuid(),
+            Title = "s",
+            Description = "desc",
+            EndDate = DateTimeOffset.Now.AddDays(1),
+            StartDate = DateTimeOffset.Now,
+            ImageId = Guid.NewGuid(),
+            SpaceId = Guid.NewGuid()
+        };
+        var result = validator.Validate(cmd);
 
-    [Test]
-    public void IsImageGuidExist_Should_Return_False()
-    {
-        var findImageGuid = new Guid("22a85f64-5717-4562-b3fc-2c963f66afa6");
-        var result = _eventValidatorRepository.IsImageIdExist(findImageGuid);
-        Assert.That(result, Is.False);
-    }
-
-    [Test]
-    public void IsImageGuidExist_Should_Return_True()
-    {
-        var findImageGuid = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-        var result = _eventValidatorRepository.IsImageIdExist(findImageGuid);
-        Assert.That(result, Is.True);
-    }
-
-    [Test]
-    public void IsSpaceGuidExist_Should_Return_True()
-    {
-        var findSpaceGuid = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-        var result = _eventValidatorRepository.IsSpaceIdExist(findSpaceGuid);
-        Assert.That(result, Is.True);
-    }
-
-    [Test]
-    public void IsSpaceGuidExist_Should_Return_False()
-    {
-        var findSpaceGuid = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-        var result = _eventValidatorRepository.IsSpaceIdExist(findSpaceGuid);
-        Assert.That(result, Is.True);
+        Assert.That(result.IsValid, Is.EqualTo(true));
     }
 }

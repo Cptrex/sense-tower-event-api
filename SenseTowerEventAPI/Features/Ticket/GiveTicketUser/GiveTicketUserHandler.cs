@@ -1,10 +1,8 @@
 ﻿using JetBrains.Annotations;
 using MediatR;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using SC.Internship.Common.Exceptions;
 using SenseTowerEventAPI.Interfaces;
-using SenseTowerEventAPI.MongoDB.Context;
 
 namespace SenseTowerEventAPI.Features.Ticket.GiveTicketUser;
 
@@ -15,13 +13,11 @@ public class GiveTicketUserHandler : IRequestHandler<GiveTicketUserCommand, Guid
     private readonly IEventSingleton _evenInstance;
     private readonly ITicketManager _ticketRepository;
 
-    public GiveTicketUserHandler(IEventSingleton evenInstance, IOptions<EventContext> options, ITicketManager ticketRepository)
+    public GiveTicketUserHandler(IEventSingleton evenInstance, ITicketManager ticketRepository, IMongoDBCommunicator mongoDbCommunicator)
     {
         _evenInstance = evenInstance;
         _ticketRepository = ticketRepository;
-        var mongoClient = new MongoClient(options.Value.ConnectionString);
-        _eventContext = mongoClient.GetDatabase(options.Value.DatabaseName)
-            .GetCollection<Models.Event>(options.Value.CollectionName);
+        _eventContext = mongoDbCommunicator.DbCollection;
     }
 
     public async Task<Guid> Handle(GiveTicketUserCommand request, CancellationToken cancellationToken)

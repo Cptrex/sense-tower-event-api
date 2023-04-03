@@ -28,36 +28,36 @@ builder.Services.AddAuthentication(options =>
     })
     .AddJwtBearer(options =>
     {
-        options.Authority = builder.Configuration["IdentityServer4Settings:Authority"];
+        options.Authority = Environment.GetEnvironmentVariable("IdentityServer4Settings__Authority");
         options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters.ValidAudiences = new List<string?> { builder.Configuration["IdentityServer4Settings:Audience"] };
+        options.TokenValidationParameters.ValidAudiences = new List<string?> { Environment.GetEnvironmentVariable("IdentityServer4Settings__Audience") };
     });
 
 builder.Services.AddAuthorization();
 
 builder.Services.AddHttpClient("paymentService",client =>
     {
-        client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:PaymentService:URL"] ?? string.Empty);
+        client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("ServiceEndpoints__PaymentService__URL") ?? string.Empty);
         client.DefaultRequestHeaders.Add("Accept", "application/json");
-        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {builder.Configuration["ServiceEndpoints:TokenAuthorization"]}");
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("ServiceEndpoints__TokenAuthorization")}");
     })
     .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2)))
     .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(10)));
 
 builder.Services.AddHttpClient("imageService", client =>
     {
-        client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:ImageService:URL"] ?? string.Empty);
+        client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("ServiceEndpoints__ImageService__URL") ?? string.Empty);
         client.DefaultRequestHeaders.Add("Accept", "application/json");
-        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {builder.Configuration["ServiceEndpoints:TokenAuthorization"]}");
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("ServiceEndpoints__TokenAuthorization")}");
     })
     .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2)))
     .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(10)));
 
 builder.Services.AddHttpClient("spaceService", client =>
     {
-        client.BaseAddress = new Uri(builder.Configuration["ServiceEndpoints:SpaceService:URL"] ?? string.Empty);
+        client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("ServiceEndpoints__SpaceService__URL") ?? string.Empty);
         client.DefaultRequestHeaders.Add("Accept", "application/json");
-        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {builder.Configuration["ServiceEndpoints:TokenAuthorization"]}");
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("ServiceEndpoints__TokenAuthorization")}");
     })
     .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2)))
     .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(10)));
@@ -109,7 +109,6 @@ builder.Services.AddSwaggerGen(swagger =>
 });
 
 DBContextMapper.InitRegisterMap();
-builder.Services.Configure<EventContext>(builder.Configuration.GetSection("EventsDatabaseSettings"));
 
 builder.Services.AddValidatorsFromAssemblyContaining<EventCreateValidatorBehavior>();
 builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
@@ -118,7 +117,6 @@ builder.Services.AddSingleton<IEventSingleton, EventSingleton>();
 builder.Services.AddSingleton<IEventValidatorManager, EventValidatorManager>();
 builder.Services.AddSingleton<ITicketManager, TicketManager>();
 builder.Services.AddSingleton<IMongoDBCommunicator, MongoDBCommunicator>();
-
 builder.Services.AddSingleton<IRabbitMQConfigure, RabbitMQConfigure>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));

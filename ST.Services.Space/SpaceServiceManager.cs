@@ -1,6 +1,4 @@
-﻿using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using ST.Services.Space.Interfaces;
+﻿using ST.Services.Space.Interfaces;
 
 namespace ST.Services.Space;
 
@@ -8,13 +6,11 @@ public class SpaceServiceManager : ISpaceServiceManager
 {
     private readonly ISpaceSingleton _spaceInstance;
     private readonly HttpClient _httpClient;
-    private readonly IConfiguration _configuration;
 
-    public SpaceServiceManager(HttpClient client, ISpaceSingleton spaceInstance, IConfiguration config)
+    public SpaceServiceManager(HttpClient client, ISpaceSingleton spaceInstance)
     {
         _httpClient = client;
         _spaceInstance = spaceInstance;
-        _configuration = config;
     }
 
     public async Task<bool> DeleteSpaceId(Guid spaceId, CancellationToken cancellationToken)
@@ -30,12 +26,6 @@ public class SpaceServiceManager : ISpaceServiceManager
 
     public async Task RemoveEventByUsedSpace(Guid spaceId, CancellationToken cancellationToken)
     {
-        HttpContent content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
-        var eventServiceUri = _configuration["ServiceEndpoints:EventServiceURL"];
-        var authToken = _configuration["ServiceEndpoints:TokenAuthorization"];
-
-        content.Headers.Add("Authorization", $"{JwtBearerDefaults.AuthenticationScheme} {authToken}");
-
-        await _httpClient.DeleteAsync(new Uri($"{eventServiceUri}/event?{spaceId}"), cancellationToken);
+        await _httpClient.DeleteAsync($"{_httpClient.BaseAddress}/event?{spaceId}", cancellationToken);
     }
 }

@@ -8,14 +8,11 @@ public class ImageServiceManager : IImageServiceManager
 {
     private readonly IImageSingleton _imageInstance;
     private readonly HttpClient _httpClient;
-    private readonly IConfiguration _configuration;
 
-    public ImageServiceManager(HttpClient client, IImageSingleton imageInstance, IConfiguration endpointOptions)
+    public ImageServiceManager(HttpClient client, IImageSingleton imageInstance)
     {
         _httpClient = client;
         _imageInstance = imageInstance;
-
-        _configuration = endpointOptions;
     }
 
     public async Task<bool> DeleteImageById(Guid imageId, CancellationToken cancellationToken)
@@ -32,7 +29,7 @@ public class ImageServiceManager : IImageServiceManager
     public async Task ReplaceEventImageByDefault(Guid imageId, CancellationToken cancellationToken)
     {
         HttpContent content = new StringContent(null!, Encoding.UTF8, "application/json");
-        var eventServiceUri = _configuration["ServiceEndpoints:EventServiceURL"];
+        var eventServiceUri = Environment.GetEnvironmentVariable("ServiceEndpoints__EventService__URL");
 
         content.Headers.Add("Authorization", $"{JwtBearerDefaults.AuthenticationScheme} {eventServiceUri}");
 

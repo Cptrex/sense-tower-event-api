@@ -8,17 +8,17 @@ public class RabbitMQConfigure : IRabbitMQConfigure
     private readonly IModel _channel;
     private readonly IConnection _connection;
 
-    public RabbitMQConfigure(IConfiguration config)
+    public RabbitMQConfigure()
     {
         var factory = new ConnectionFactory
         {
-            HostName = config["ServiceEndpoints:RabbitMQ:Hostname"],
-            Port = Convert.ToInt32(config["ServiceEndpoints:RabbitMQ:Port"]),
-            UserName = config["ServiceEndpoints:RabbitMQ:User"],
-            Password = config["ServiceEndpoints:RabbitMQ:Password"],
+            HostName = Environment.GetEnvironmentVariable("ServiceEndpoints__RabbitMQ__Hostname"),
+            Port = Convert.ToInt32(Environment.GetEnvironmentVariable("ServiceEndpoints__RabbitMQ__Port")),
+            UserName = Environment.GetEnvironmentVariable("ServiceEndpoints__RabbitMQ__User"),
+            Password = Environment.GetEnvironmentVariable("ServiceEndpoints__RabbitMQ__Password"),
             VirtualHost = "/",
             RequestedHeartbeat = new TimeSpan(60),
-            Ssl = { ServerName = config["ServiceEndpoints:RabbitMQ:Hostname"], Enabled = false }
+            Ssl = { ServerName = Environment.GetEnvironmentVariable("ServiceEndpoints__RabbitMQ__Hostname"), Enabled = false }
         }; 
         
         _connection = factory.CreateConnection();

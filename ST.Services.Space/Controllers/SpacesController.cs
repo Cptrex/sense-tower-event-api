@@ -6,10 +6,10 @@ namespace ST.Services.Space.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize]
+[Authorize(AuthenticationSchemes = "Bearer")]
 public class SpacesController : ControllerBase
 {
-    [HttpGet("/{spaceId:guid}")]
+    [HttpGet("{spaceId:guid}")]
     public ScResult<bool> IsSpaceExist([FromRoute] Guid spaceId, CancellationToken cancellationToken)
     {
         return new ScResult<bool>(true);

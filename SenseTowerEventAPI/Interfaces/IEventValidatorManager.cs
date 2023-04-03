@@ -2,7 +2,7 @@
 
 public interface IEventValidatorManager
 {
-    public bool IsImageIdExist(Guid imageId);
+    public Task<bool> IsImageIdExist(Guid imageId);
 
-    public bool IsSpaceIdExist(Guid spaceId);
+    public Task<bool> IsSpaceIdExist(Guid spaceId);
 }

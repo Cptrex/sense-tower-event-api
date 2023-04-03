@@ -5,7 +5,15 @@
       "launchBrowser": false,
       "launchUrl": "",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ServiceEndpoints__TokenAuthorization": "Bearer",
+        "ServiceEndpoints__EventService__URL": "http://localhost:5030",
+        "ServiceEndpoints__RabbitMQ__Hostname": "localhost",
+        "ServiceEndpoints__RabbitMQ__Port": "5672",
+        "ServiceEndpoints__RabbitMQ__User": "guest",
+        "ServiceEndpoints__RabbitMQ__Password": "guest",
+        "IdentityServer4Settings__Authority": "http://localhost:5001",
+        "IdentityServer4Settings__Audience": "myApi"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5040"

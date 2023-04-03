@@ -14,12 +14,10 @@ public class AddTicketHandler :IRequestHandler<AddTicketCommand, Guid>
     private readonly IMongoCollection<Models.Event> _eventContext;
     private  readonly ITicketManager _ticketRepository;
 
-    public AddTicketHandler(IOptions<EventContext> options, ITicketManager ticketRepository)
+    public AddTicketHandler(ITicketManager ticketRepository, IMongoDBCommunicator mongoDb)
     {
         _ticketRepository = ticketRepository;
-        var mongoClient = new MongoClient(options.Value.ConnectionString);
-        _eventContext = mongoClient.GetDatabase(options.Value.DatabaseName)
-            .GetCollection<Models.Event>(options.Value.CollectionName);
+        _eventContext = mongoDb.DbCollection;
     }
 
     public async Task<Guid> Handle(AddTicketCommand request, CancellationToken cancellationToken)

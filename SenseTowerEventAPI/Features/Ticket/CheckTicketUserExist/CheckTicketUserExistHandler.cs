@@ -1,10 +1,8 @@
 ﻿using JetBrains.Annotations;
 using MediatR;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using SC.Internship.Common.Exceptions;
 using SenseTowerEventAPI.Interfaces;
-using SenseTowerEventAPI.MongoDB.Context;
 
 namespace SenseTowerEventAPI.Features.Ticket.CheckTicketUserExist;
 
@@ -14,12 +12,10 @@ public class CheckTicketUserExistHandler : IRequestHandler<CheckTicketUserExistQ
     private readonly IMongoCollection<Models.Event> _eventContext;
     private readonly IEventSingleton _eventInstance;
 
-    public CheckTicketUserExistHandler(IEventSingleton eventInstance, IOptions<EventContext> options)
+    public CheckTicketUserExistHandler(IEventSingleton eventInstance, IMongoDBCommunicator mongoDbCommunicator)
     {
         _eventInstance = eventInstance;
-        var mongoClient = new MongoClient(options.Value.ConnectionString);
-        _eventContext = mongoClient.GetDatabase(options.Value.DatabaseName)
-            .GetCollection<Models.Event>(options.Value.CollectionName);
+        _eventContext = mongoDbCommunicator.DbCollection;
     }
 
     public async Task<bool> Handle(CheckTicketUserExistQuery request, CancellationToken cancellationToken)

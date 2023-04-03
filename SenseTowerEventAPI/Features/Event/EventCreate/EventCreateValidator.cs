@@ -25,7 +25,13 @@ public class EventCreateValidator : AbstractValidator<EventCreateCommand>
         RuleFor(e => e.Description).MaximumLength(10);
         RuleFor(e => e.Description).Must(e => e.Contains("s")).WithMessage("Описание должно содержать s");
 
-        RuleFor(e => e.ImageId).NotNull().Must(_eventValidatorRepository.IsImageIdExist).WithMessage("Такого изображения не существует");
-        RuleFor(e => e.SpaceId).NotNull().Must(_eventValidatorRepository.IsSpaceIdExist).WithMessage("Такого пространства не существует");
+        RuleFor(e => e.ImageId)
+            .NotNull()
+            .Must(e=> _eventValidatorRepository.IsImageIdExist(e).Result)
+            .WithMessage("Такого изображения не существует");
+        RuleFor(e => e.SpaceId)
+            .NotNull()
+            .Must(e => _eventValidatorRepository.IsSpaceIdExist(e).Result)
+            .WithMessage("Такого пространства не существует");
     }
 }

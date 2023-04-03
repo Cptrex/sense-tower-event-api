@@ -29,28 +29,36 @@ services:
          - 5020:80
       depends_on:
          - rabbitmq
+      restart: always
       networks:
          - stnetworkapi
       environment:
-         - ServiceEndpoints__TokenAuthorization = ""
-         - ServiceEndpoints__RabbitMQ__Hostname = "rabbitmq"
-         - ServiceEndpoints__RabbitMQ__Port = "5672"
-         - ServiceEndpoints__RabbitMQ__User = "guest"
-         - ServiceEndpoints__RabbitMQ__Password = "guest"
+         - ServiceEndpoints__TokenAuthorization=eyJhbGciOiJSUzI1NiIsImtpZCI6IjNFQzc5ODA3QTcyMUJDQTdBOTE3NEVFMkNBRTgzM0YxIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2ODA1NDY3MjksImV4cCI6MTY4MDU1MDMyOSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoibXlBcGkiLCJjbGllbnRfaWQiOiJzZW5zZXRvd2VyLWV2ZW50LWFwaSIsImp0aSI6IkNGNUQ1NERBNTE5QUQwNkMwMTA4QUEzNTUzMjhENkE0IiwiaWF0IjoxNjgwNTQ2NzI5LCJzY29wZSI6WyJteUFwaS5yZWFkIl19.CcMz9RWRRv_WBxzd1MFkJY1xML-IY71QGdX1mDSh_ei7HGNLnRcajWbeTQ9TL4s4DdgHaQEoPu1anUQyuo2bhuJ-3YcewihcMx-tcZwwffgT0KtICZ_oTD5y82e3WYuJ_Im07M8CoQo6tH5ZNka1nDkSYMvkVgEhPzlR_6ymWjaSsRMg8eE-u-9LpR_6JHcoOnNQOhccGUUrOBM6cPoRefUBj0omccr7f7DhyEdJIHgaT33tyQQSgb2nGtczd-5n14nu9VjvjaY5rP37UhPlr-nRwXSf7kqTSq9USXr0j94WeVlKhCbI2I0eXn-k891sF6UG7FM7NROc4E7mS1DyVw 
+         - ServiceEndpoints__EventService__URL=http://localhost:5030
+         - ServiceEndpoints__RabbitMQ__Hostname=rabbitmq
+         - ServiceEndpoints__RabbitMQ__Port=5672
+         - ServiceEndpoints__RabbitMQ__User=guest
+         - ServiceEndpoints__RabbitMQ__Password=guest
+         - IdentityServer4Settings__Authority=http://localhost:5001
+         - IdentityServer4Settings__Audience=myApi
    st-space:
       image: cptrex/st-service-space
       ports:
          - 5040:80
       depends_on:
          - rabbitmq
+      restart: always
       networks:
          - stnetworkapi
       environment:
-         - ServiceEndpoints__TokenAuthorization = ""
-         - ServiceEndpoints__RabbitMQ__Hostname = "rabbitmq"
-         - ServiceEndpoints__RabbitMQ__Port = "5672"
-         - ServiceEndpoints__RabbitMQ__User = "guest"
-         - ServiceEndpoints__RabbitMQ__Password = "guest"
+         - ServiceEndpoints__TokenAuthorization=eyJhbGciOiJSUzI1NiIsImtpZCI6IjNFQzc5ODA3QTcyMUJDQTdBOTE3NEVFMkNBRTgzM0YxIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2ODA1NDY3MjksImV4cCI6MTY4MDU1MDMyOSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoibXlBcGkiLCJjbGllbnRfaWQiOiJzZW5zZXRvd2VyLWV2ZW50LWFwaSIsImp0aSI6IkNGNUQ1NERBNTE5QUQwNkMwMTA4QUEzNTUzMjhENkE0IiwiaWF0IjoxNjgwNTQ2NzI5LCJzY29wZSI6WyJteUFwaS5yZWFkIl19.CcMz9RWRRv_WBxzd1MFkJY1xML-IY71QGdX1mDSh_ei7HGNLnRcajWbeTQ9TL4s4DdgHaQEoPu1anUQyuo2bhuJ-3YcewihcMx-tcZwwffgT0KtICZ_oTD5y82e3WYuJ_Im07M8CoQo6tH5ZNka1nDkSYMvkVgEhPzlR_6ymWjaSsRMg8eE-u-9LpR_6JHcoOnNQOhccGUUrOBM6cPoRefUBj0omccr7f7DhyEdJIHgaT33tyQQSgb2nGtczd-5n14nu9VjvjaY5rP37UhPlr-nRwXSf7kqTSq9USXr0j94WeVlKhCbI2I0eXn-k891sF6UG7FM7NROc4E7mS1DyVw
+         - ServiceEndpoints__EventService__URL=http://localhost:5030
+         - ServiceEndpoints__RabbitMQ__Hostname=rabbitmq
+         - ServiceEndpoints__RabbitMQ__Port=5672
+         - ServiceEndpoints__RabbitMQ__User=guest
+         - ServiceEndpoints__RabbitMQ__Password=guest
+         - IdentityServer4Settings__Authority=http://localhost:5001
+         - IdentityServer4Settings__Audience=myApi
 networks:
    stnetworkapi:
       name: stnetworkapi
