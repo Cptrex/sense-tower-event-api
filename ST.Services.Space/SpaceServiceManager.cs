@@ -1,31 +1,46 @@
-﻿using ST.Services.Space.Interfaces;
+﻿using Newtonsoft.Json;
+using ST.Services.Space.Interfaces;
+using System.Text;
+using System.Threading.Channels;
+using ST.Services.Space.Models;
+using RabbitMQ.Client;
 
 namespace ST.Services.Space;
 
 public class SpaceServiceManager : ISpaceServiceManager
 {
     private readonly ISpaceSingleton _spaceInstance;
-    private readonly HttpClient _httpClient;
+    private readonly IModel _channel;
 
-    public SpaceServiceManager(HttpClient client, ISpaceSingleton spaceInstance)
+    public SpaceServiceManager(ISpaceSingleton spaceInstance, IRabbitMQConfigure rabbitMqConfigure)
     {
-        _httpClient = client;
         _spaceInstance = spaceInstance;
+        _channel = rabbitMqConfigure.GetRabbitMQChannel();
     }
 
     public async Task<bool> DeleteSpaceId(Guid spaceId, CancellationToken cancellationToken)
     {
         var result = _spaceInstance.Spaces.RemoveAll(i => i == spaceId);
-
         if (result <= 0) return false;
 
-        await RemoveEventByUsedSpace(spaceId, cancellationToken);
-
+        RemoveEventByUsedSpace(spaceId, cancellationToken);
+        
         return true;
     }
 
-    public async Task RemoveEventByUsedSpace(Guid spaceId, CancellationToken cancellationToken)
+    public void RemoveEventByUsedSpace(Guid spaceId, CancellationToken cancellationToken)
     {
-        await _httpClient.DeleteAsync($"{_httpClient.BaseAddress}/event?{spaceId}", cancellationToken);
+        var operationModel = new EventOperationModel()
+        {
+            DeletedId = spaceId,
+            Type = EventOperationType.SpaceDeleteEvent
+        };
+
+        var json = JsonConvert.SerializeObject(operationModel);
+        var body = Encoding.UTF8.GetBytes(json);
+
+        _channel.BasicPublish(exchange: "", routingKey: "event-queue", body: body);
+
+        Console.WriteLine($"{DateTimeOffset.Now} | [SPACE SERVICE] send request event-queue {json}");
     }
 }

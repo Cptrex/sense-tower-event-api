@@ -75,16 +75,17 @@ public class RabbitMQConsumer : BackgroundService
                 switch (eventOperation.Type)
                 {
                     case EventOperationType.ImageDeleteEvent:
-                        var filter = Builders<Event>.Filter.Eq("imageId", eventOperation.DeletedId);
-                        var update = Builders<Event>.Update.Set("imageId", Guid.Empty);
+                        var filter = Builders<Event>.Filter.Eq(e=> e.ImageId, eventOperation.DeletedId);
+                        var update = Builders<Event>.Update.Set(e => e.ImageId, Guid.Empty);
 
                         _mongoDb.DbCollection.UpdateMany(filter, update);
                         operationResult = true;
                         break;
                     case EventOperationType.SpaceDeleteEvent:
-                        filter = Builders<Event>.Filter.Eq("spaceId", eventOperation.DeletedId);
+                        filter = Builders<Event>.Filter.Eq(e=> e.SpaceId, eventOperation.DeletedId);
 
-                        _mongoDb.DbCollection.DeleteMany(filter);
+                        var result = _mongoDb.DbCollection.DeleteMany(filter);
+                        Console.WriteLine($"DeletedCount: {result.DeletedCount}");
                         operationResult = true;
                         break;
                     case EventOperationType.EventDeleteEvent:

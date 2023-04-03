@@ -11,8 +11,8 @@ public class EventValidatorManager : IEventValidatorManager
 
     public EventValidatorManager(IHttpClientFactory httpFactory)
     {
-        _httpSpaceServiceClient = httpFactory.CreateClient("spaceService");
         _httpImageServiceClient = httpFactory.CreateClient("imageService");
+        _httpSpaceServiceClient = httpFactory.CreateClient("spaceService");
     }
 
     public async Task<bool> IsImageIdExist(Guid imageId)
@@ -21,9 +21,7 @@ public class EventValidatorManager : IEventValidatorManager
 
         var responseParsed = JsonConvert.DeserializeObject<ScResult<bool>>(await response.Content.ReadAsStringAsync());
         
-        Console.WriteLine("resImage" + responseParsed);
-
-        return true;
+        return responseParsed!.Result;
     }
 
     public async Task<bool> IsSpaceIdExist(Guid spaceId)
@@ -32,8 +30,6 @@ public class EventValidatorManager : IEventValidatorManager
 
         var responseParsed = JsonConvert.DeserializeObject<ScResult<bool>>(await response.Content.ReadAsStringAsync());
 
-        Console.WriteLine("resSpace" + responseParsed);
-
-        return true;
+        return responseParsed!.Result;
     }
 }

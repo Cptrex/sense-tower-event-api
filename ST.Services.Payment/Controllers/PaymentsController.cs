@@ -25,7 +25,7 @@ public class PaymentsController : ControllerBase
         return await Task.FromResult(Ok(transactionId));
     }
 
-    [HttpPut("/{transactionId:guid}/{state:int}")]
+    [HttpPut("{transactionId:guid}/{state:int}")]
     public async Task<IActionResult> ChangePaymentState([FromRoute] Guid transactionId, [FromRoute] int state, CancellationToken cancellationToken)
     {
         _paymentsInstance.ChangePaymentState((PaymentState) state, transactionId, cancellationToken);

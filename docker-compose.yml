@@ -59,6 +59,19 @@ services:
          - ServiceEndpoints__RabbitMQ__Password=guest
          - IdentityServer4Settings__Authority=http://localhost:5001
          - IdentityServer4Settings__Audience=myApi
+   st-payment:
+      image: cptrex/st-service-payment
+      ports:
+         - 5080:80
+      expose:
+         - 5080
+      restart: always
+      networks:
+         - stnetworkapi
+      environment:
+         - ServiceEndpoints__TokenAuthorization=eyJhbGciOiJSUzI1NiIsImtpZCI6IjNFQzc5ODA3QTcyMUJDQTdBOTE3NEVFMkNBRTgzM0YxIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2ODA1NDY3MjksImV4cCI6MTY4MDU1MDMyOSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoibXlBcGkiLCJjbGllbnRfaWQiOiJzZW5zZXRvd2VyLWV2ZW50LWFwaSIsImp0aSI6IkNGNUQ1NERBNTE5QUQwNkMwMTA4QUEzNTUzMjhENkE0IiwiaWF0IjoxNjgwNTQ2NzI5LCJzY29wZSI6WyJteUFwaS5yZWFkIl19.CcMz9RWRRv_WBxzd1MFkJY1xML-IY71QGdX1mDSh_ei7HGNLnRcajWbeTQ9TL4s4DdgHaQEoPu1anUQyuo2bhuJ-3YcewihcMx-tcZwwffgT0KtICZ_oTD5y82e3WYuJ_Im07M8CoQo6tH5ZNka1nDkSYMvkVgEhPzlR_6ymWjaSsRMg8eE-u-9LpR_6JHcoOnNQOhccGUUrOBM6cPoRefUBj0omccr7f7DhyEdJIHgaT33tyQQSgb2nGtczd-5n14nu9VjvjaY5rP37UhPlr-nRwXSf7kqTSq9USXr0j94WeVlKhCbI2I0eXn-k891sF6UG7FM7NROc4E7mS1DyVw
+         - IdentityServer4Settings__Authority=http://localhost:5001
+         - IdentityServer4Settings__Audience=myApi
 networks:
    stnetworkapi:
       name: stnetworkapi

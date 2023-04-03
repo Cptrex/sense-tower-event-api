@@ -3,6 +3,7 @@ using SenseTowerEventAPI.Interfaces;
 using System.Text;
 using Newtonsoft.Json;
 using SC.Internship.Common.ScResult;
+using SenseTowerEventAPI.Enumerics;
 
 namespace SenseTowerEventAPI.Features.Ticket;
 
@@ -36,7 +37,7 @@ public class TicketManager : ITicketManager
     {
         HttpContent content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
 
-        var result = await _httpPaymentServiceClient.PostAsync("/payments", content);
+        var result = await _httpPaymentServiceClient.PostAsync($"{_httpPaymentServiceClient.BaseAddress}payments", content);
 
         var response = JsonConvert.DeserializeObject<ScResult<Guid>>(await result.Content.ReadAsStringAsync());
 
@@ -49,17 +50,15 @@ public class TicketManager : ITicketManager
 
     public async Task CancelTicketPayment(Guid createdTransactionId)
     {
-        var payload = JsonConvert.SerializeObject(createdTransactionId);
-        HttpContent content = new StringContent(payload, Encoding.UTF8, "application/json");
+        HttpContent content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
 
-        await _httpPaymentServiceClient.PutAsync("/payments", content);
+        await _httpPaymentServiceClient.PutAsync($"{_httpPaymentServiceClient.BaseAddress}payments/{createdTransactionId}/{PaymentState.Canceled}", content);
     }
 
     public async Task ConfirmTicketPayment(Guid createdTransactionId)
     {
-        var payload = JsonConvert.SerializeObject(createdTransactionId);
-        HttpContent content = new StringContent(payload, Encoding.UTF8, "application/json");
+        HttpContent content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
 
-        await _httpPaymentServiceClient.PutAsync("/payments", content);
+        await _httpPaymentServiceClient.PutAsync($"{_httpPaymentServiceClient.BaseAddress}payments/{createdTransactionId}/{PaymentState.Confirmed}", content);
     }
 }

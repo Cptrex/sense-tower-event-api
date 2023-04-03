@@ -19,7 +19,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.Authority = Environment.GetEnvironmentVariable("IdentityServer4Settings__Authority");
     options.RequireHttpsMetadata = false;
-    options.TokenValidationParameters.ValidAudiences = new List<string?> { Environment.GetEnvironmentVariable("IdentityServer4Settings__Authority") };
+    options.TokenValidationParameters.ValidAudiences = new List<string?> { Environment.GetEnvironmentVariable("IdentityServer4Settings__Audience") };
 });
 
 builder.Services.AddAuthorization();

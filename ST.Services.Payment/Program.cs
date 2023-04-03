@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
-using Polly;
 using ST.Services.Payment.Interfaces;
 using ST.Services.Payment.Models;
 
@@ -18,15 +17,6 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization();
-
-builder.Services.AddHttpClient("",client =>
-    {
-        client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("ServiceEndpoints__EventService__URL") ?? string.Empty);
-        client.DefaultRequestHeaders.Add("Accept", "application/json");
-        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("ServiceEndpoints__TokenAuthorization")}");
-    })
-    .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2)))
-    .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(5, TimeSpan.FromSeconds(10)));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();

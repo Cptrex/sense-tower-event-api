@@ -6,7 +6,7 @@ namespace ST.Services.Image.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(AuthenticationSchemes = "Bearer")]
+[Authorize]
 public class ImagesController : ControllerBase
 {
     [HttpGet("{imageId:guid}")]

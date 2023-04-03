@@ -46,7 +46,7 @@ public class EventController : ControllerBase
     /// <param name="eventId">GUID мероприятия</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
     /// <returns>Возвращает HTTP Response Code</returns>
-    [HttpDelete("/{eventId:guid}")]
+    [HttpDelete("{eventId:guid}")]
     public async Task<ScResult> DeleteEvent([FromRoute] Guid eventId, CancellationToken cancellationToken)
     {
         if (ModelState.IsValid == false) return new ScResult { Error = new ScError { Message = "Возникла ошибка передачи данных" }};
@@ -64,7 +64,7 @@ public class EventController : ControllerBase
     /// <param name="cmd">Поля мероприятия</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
     /// <returns>Возвращает HTTP Response Code</returns>
-    [HttpPut("/{eventId:guid}")]
+    [HttpPut("{eventId:guid}")]
     public async Task<ScResult> UpdateEventById([FromRoute] Guid eventId, EventUpdateCommand cmd, CancellationToken cancellationToken)
     {
         if (ModelState.IsValid == false) return new ScResult { Error = new ScError { Message = "Ошибка передачи данных" } };

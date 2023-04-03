@@ -6,8 +6,7 @@
       "launchUrl": "",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ServiceEndpoints__TokenAuthorization": "Bearer",
-        "ServiceEndpoints__EventService__URL": "http://localhost:5030",
+        "ServiceEndpoints__TokenAuthorization": "",
         "IdentityServer4Settings__Authority": "http://localhost:5001",
         "IdentityServer4Settings__Audience": "myApi"
       },

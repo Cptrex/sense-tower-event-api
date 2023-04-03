@@ -25,12 +25,12 @@ public class RabbitMQConsumer : BackgroundService
 
             _channel.QueueDeclare(queue: "space-queue", durable: false, exclusive: false, autoDelete: false, arguments: null);
 
-            Console.WriteLine("[EVENT SERVICE] listening space-queue started");
+            Console.WriteLine("[SPACE SERVICE] listening space-queue started");
 
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[EVENT SERVICE] listening space-queue error: {ex}");
+            Console.WriteLine($"[SPACE SERVICE] listening space-queue error: {ex}");
         }
     }
 

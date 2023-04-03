@@ -6,7 +6,7 @@ namespace ST.Services.Space.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(AuthenticationSchemes = "Bearer")]
+[Authorize]
 public class SpacesController : ControllerBase
 {
     [HttpGet("{spaceId:guid}")]
