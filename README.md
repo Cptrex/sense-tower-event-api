@@ -14,7 +14,7 @@ https://hub.docker.com/u/cptrex
 _____
 
 ### Установка
-1. **Event API Service** 
+1. **Event API Service** <br>
     1.1. Клонируем репозиторий:
     ```
     $ git clone https://github.com/Cptrex/sense-tower-event-api.git
@@ -28,7 +28,7 @@ _____
     ```
     *Введенная команда соберет контейнер из сервисов с заложенными настройками в файле docker-compose.yml*
 
-2. **MongoDB**
+2. **MongoDB** <br>
     2.1. Открываем Powershell и вводим команду:
     ```
     $ docker pull mongo
@@ -42,13 +42,13 @@ _____
     
     *Mongo DB используется как основная база данных API.*
 
-3. **Identity Server 4**
+3. **Identity Server 4** <br>
   Установка Identity Server 4 включена в docker-compose файл.
     github: https://github.com/Cptrex/identity-server-4
     docker hub: https://hub.docker.com/r/cptrex/identity-server-4
     *Identity Server 4 необходим для аутентификации запросов к API*
 
-4. **ImageService, SpaceService, PaymentService**
+4. **ImageService, SpaceService, PaymentService** <br>
     Установка данных сервисов включена в docker-compose файл.
     4.1. Данные сервисы являются слушателями очереди брокера сообщений RabbitMQ. При их запуске создастся очередь, если она отсутсвует.
     4.2. Тестирование запросов можно производить через UI часть RabbitMQ. *http://localhost:15672* </br>
