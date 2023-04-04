@@ -44,12 +44,12 @@ _____
 
 3. **Identity Server 4** <br>
   Установка Identity Server 4 включена в docker-compose файл.
-    github: https://github.com/Cptrex/identity-server-4
-    docker hub: https://hub.docker.com/r/cptrex/identity-server-4
+    github: https://github.com/Cptrex/identity-server-4 <br>
+    docker hub: https://hub.docker.com/r/cptrex/identity-server-4 <br>
     *Identity Server 4 необходим для аутентификации запросов к API*
 
 4. **ImageService, SpaceService, PaymentService** <br>
-    Установка данных сервисов включена в docker-compose файл.
+    Установка данных сервисов включена в docker-compose файл. <br>
     4.1. Данные сервисы являются слушателями очереди брокера сообщений RabbitMQ. При их запуске создастся очередь, если она отсутсвует. <br>
     4.2. Тестирование запросов можно производить через UI часть RabbitMQ. *http://localhost:15672* </br>
     4.3. JSON объекта для тела запроса в очередь событий:
