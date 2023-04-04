@@ -43,7 +43,7 @@ _____
     *Mongo DB используется как основная база данных API.*
 
 3. **Identity Server 4** </br>
-  Установка Identity Server 4 включена в docker-compose файл.
+  Установка Identity Server 4 включена в docker-compose файл. </br>
     github: https://github.com/Cptrex/identity-server-4 </br>
     docker hub: https://hub.docker.com/r/cptrex/identity-server-4 </br>
     *Identity Server 4 необходим для аутентификации запросов к API*
