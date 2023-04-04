@@ -42,15 +42,15 @@ _____
     
     *Mongo DB используется как основная база данных API.*
 
-3. **Identity Server 4** <br>
+3. **Identity Server 4** </br>
   Установка Identity Server 4 включена в docker-compose файл.
-    github: https://github.com/Cptrex/identity-server-4 <br>
-    docker hub: https://hub.docker.com/r/cptrex/identity-server-4 <br>
+    github: https://github.com/Cptrex/identity-server-4 </br>
+    docker hub: https://hub.docker.com/r/cptrex/identity-server-4 </br>
     *Identity Server 4 необходим для аутентификации запросов к API*
 
-4. **ImageService, SpaceService, PaymentService** <br>
-    Установка данных сервисов включена в docker-compose файл. <br>
-    4.1. Данные сервисы являются слушателями очереди брокера сообщений RabbitMQ. При их запуске создастся очередь, если она отсутсвует. <br>
+4. **ImageService, SpaceService, PaymentService** </br>
+    Установка данных сервисов включена в docker-compose файл. </br>
+    4.1. Данные сервисы являются слушателями очереди брокера сообщений RabbitMQ. При их запуске создастся очередь, если она отсутсвует. </br>
     4.2. Тестирование запросов можно производить через UI часть RabbitMQ. *http://localhost:15672* </br>
     4.3. JSON объекта для тела запроса в очередь событий:
     ```
@@ -61,7 +61,7 @@ _____
     |SpaceDeleteEvent  | 1             | Событие удаления пространства | Id пространства
     |ImageDeleteEvent  | 2             | Событие удаления изображения  | Id изображения
     |EventDeleteEvent  | 3             | Событие удаления мероприятия  | Id мероприятия
-5. **RabbitMQ** <br>
+5. **RabbitMQ** </br>
     Установка сервиса брокера сообщений включена в docker-compose файл.
     *Web версия брокера сообщений будет досутпна после запуска по адресу: http://localhost:15672*
 _____
