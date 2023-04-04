@@ -1,10 +1,8 @@
 ﻿using JetBrains.Annotations;
 using MediatR;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using SC.Internship.Common.Exceptions;
 using SenseTowerEventAPI.Interfaces;
-using SenseTowerEventAPI.MongoDB.Context;
 
 namespace SenseTowerEventAPI.Features.Ticket.AddTicket;
 
@@ -22,7 +20,7 @@ public class AddTicketHandler :IRequestHandler<AddTicketCommand, Guid>
 
     public async Task<Guid> Handle(AddTicketCommand request, CancellationToken cancellationToken)
     {
-        var foundEvent = ( await _eventContext.Find(e => e.Id == request.Id).ToListAsync(cancellationToken: cancellationToken)).FirstOrDefault();
+        var foundEvent = ( await _eventContext.Find(e => e.Id == request.EventId).ToListAsync(cancellationToken: cancellationToken)).FirstOrDefault();
         
         if (foundEvent == null) throw new ScException("Ошибка добавления билета. Мероприятие не найдено");
 
@@ -32,8 +30,8 @@ public class AddTicketHandler :IRequestHandler<AddTicketCommand, Guid>
         
         foundEvent.Tickets.Add(ticket);
 
-        var filter = Builders<Models.Event>.Filter.Eq("id", foundEvent.Id);
-        var update = Builders<Models.Event>.Update.Set("tickets", foundEvent.Tickets);
+        var filter = Builders<Models.Event>.Filter.Eq(e=> e.Id, foundEvent.Id);
+        var update = Builders<Models.Event>.Update.Set(e=> e.Tickets, foundEvent.Tickets);
 
         await _eventContext.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
 

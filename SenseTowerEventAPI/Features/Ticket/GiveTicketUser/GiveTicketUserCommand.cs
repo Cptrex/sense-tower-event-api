@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using SenseTowerEventAPI.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 // ReSharper disable UnusedMember.Global
 
@@ -8,7 +8,7 @@ namespace SenseTowerEventAPI.Features.Ticket.GiveTicketUser;
 /// Модель команды выдачи билета пользователю на мероприятие
 /// </summary>
 [SwaggerSchema("Модель команды выдачи билета пользователю на мероприятие")]
-public class GiveTicketUserCommand : IRequest<Guid>
+public class GiveTicketUserCommand : ICommand<Guid>
 {
     /// <summary>
     /// Уникальный идентификатор билета
@@ -26,4 +26,8 @@ public class GiveTicketUserCommand : IRequest<Guid>
     /// Место мероприятия
     /// </summary>
     public int PlaceNumber { get; set; }
+    /// <summary>
+    /// Стоимость билета
+    /// </summary>
+    public decimal Price { get; set; }
 }

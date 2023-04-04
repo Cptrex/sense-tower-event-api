@@ -27,7 +27,7 @@ public class EventCreateValidator : AbstractValidator<EventCreateCommand>
 
         RuleFor(e => e.ImageId)
             .NotNull()
-            .Must(e=> _eventValidatorRepository.IsImageIdExist(e).Result)
+            .Must(e => _eventValidatorRepository.IsImageIdExist(e).Result)
             .WithMessage("Такого изображения не существует");
         RuleFor(e => e.SpaceId)
             .NotNull()

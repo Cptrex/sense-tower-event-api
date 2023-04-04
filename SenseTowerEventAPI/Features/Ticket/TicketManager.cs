@@ -28,7 +28,7 @@ public class TicketManager : ITicketManager
     public async Task<int> GetLastTicketNumberInEvent(Guid eventId)
     {
         var tickets = await GetAllEventTickets(eventId);
-        var lastTickerNumber = tickets.OrderBy(t => t.PlaceNumber).First().PlaceNumber;
+        var lastTickerNumber = tickets.OrderBy(t => t.PlaceNumber).ToList().Last().PlaceNumber;
 
         return lastTickerNumber;
     }

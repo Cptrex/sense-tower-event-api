@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Polly;
 using ST.Services.Space;
 using ST.Services.Space.Interfaces;
@@ -19,7 +20,11 @@ builder.Services.AddAuthentication(options =>
 {
     options.Authority = Environment.GetEnvironmentVariable("IdentityServer4Settings__Authority");
     options.RequireHttpsMetadata = false;
-    options.TokenValidationParameters.ValidAudiences = new List<string?> { Environment.GetEnvironmentVariable("IdentityServer4Settings__Audience") };
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidAudiences = new List<string?> { Environment.GetEnvironmentVariable("IdentityServer4Settings__Audience") }
+    };
 });
 
 builder.Services.AddAuthorization();

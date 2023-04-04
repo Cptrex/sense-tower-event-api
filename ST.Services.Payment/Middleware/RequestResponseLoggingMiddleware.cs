@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.IO;
 
-namespace SenseTowerEventAPI.Middleware;
+namespace ST.Services.Payment.Middleware;
 
 public class RequestResponseLoggingMiddleware
 {

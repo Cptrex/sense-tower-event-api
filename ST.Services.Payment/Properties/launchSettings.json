@@ -6,8 +6,7 @@
       "launchUrl": "",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ServiceEndpoints__TokenAuthorization": "",
-        "IdentityServer4Settings__Authority": "http://localhost:5001",
+        "ServiceEndpoints__TokenAuthorization": "eyJhbGciOiJSUzI1NiIsImtpZCI6IkZBOTM3MDFGOUJGMUU0RjI0MTBBOTU4N0U2NjhDRUJEIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2ODA2MDg3MjAsImV4cCI6MTY4MDYxMjMyMCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoibXlBcGkiLCJjbGllbnRfaWQiOiJzZW5zZXRvd2VyLWV2ZW50LWFwaSIsImp0aSI6IjlGRTc4QTg4QkQzNTA0NTdFRTczNzE3NjY2RjI4OTc0IiwiaWF0IjoxNjgwNjA4NzIwLCJzY29wZSI6WyJteUFwaS5yZWFkIl19.f8NJRg6tZywrnvKa1S8ZXk7q6HPBuV9Ode7eqy6P5raepPdJCEj2isP2AcZgbULehewPEjBGi_vZcfbVH8ZDSPEnSGUbcIIIfbWMjJh-9txWZ8ab4qk8MaM8957d4g77cfJ4QAIJz5DNV9Ltp8PBy9HkjqeUgQxkbQ9BvkHYbMzemqrfQ5WksTnoElJW5Va7aYqx2tq94VnU9SyMqh11l0A59Yr8MzvOhUTK1r7Sr7k56leLWx12w8tQSpx15GO53uYj9Bo8rb6Wn5aua8f3pvltKps6qwNLEk9uFYF-xDUr8buw-AN4aMfn1YpKzZCdaQa31i8Vk_-446ar48sZYQ",
         "IdentityServer4Settings__Audience": "myApi"
       },
       "dotnetRunMessages": true,

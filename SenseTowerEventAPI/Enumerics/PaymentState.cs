@@ -1,9 +1,12 @@
 ﻿// ReSharper disable IdentifierTypo
+
+using JetBrains.Annotations;
+
 namespace SenseTowerEventAPI.Enumerics;
 
 public enum PaymentState
 {
-    Hold = 0,
+    [UsedImplicitly] Hold = 0,
     Confirmed = 1,
     Canceled = -1
 }

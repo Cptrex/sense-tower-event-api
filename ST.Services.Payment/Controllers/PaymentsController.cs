@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SC.Internship.Common.ScResult;
 using ST.Services.Payment.Enumerics;
 using ST.Services.Payment.Interfaces;
 
@@ -18,17 +19,19 @@ public class PaymentsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreatePayment(CancellationToken cancellationToken)
+    public async Task<ScResult<Guid>> CreatePayment(CancellationToken cancellationToken)
     {
         var transactionId = _paymentsInstance.AddTransactionToPool(cancellationToken);
 
-        return await Task.FromResult(Ok(transactionId));
+        return await Task.FromResult(new ScResult<Guid>(transactionId));
     }
 
-    [HttpPut("{transactionId:guid}/{state:int}")]
-    public async Task<IActionResult> ChangePaymentState([FromRoute] Guid transactionId, [FromRoute] int state, CancellationToken cancellationToken)
+    [HttpPut("{transactionId:guid}/{state}")]
+    public async Task<ScResult> ChangePaymentState([FromRoute] Guid transactionId, [FromRoute] string state, CancellationToken cancellationToken)
     {
-        _paymentsInstance.ChangePaymentState((PaymentState) state, transactionId, cancellationToken);
-        return await Task.FromResult(Ok());
+        Enum.TryParse(state, out PaymentState paymentState);
+        _paymentsInstance.ChangePaymentState(paymentState, transactionId, cancellationToken);
+
+        return await Task.FromResult(new ScResult());
     }
 }

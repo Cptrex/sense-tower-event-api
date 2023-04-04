@@ -65,7 +65,7 @@ public class RabbitMQConsumer : BackgroundService
                 if (eventOperation == null) return;
                 Console.WriteLine($"{DateTimeOffset.Now} | [SPACE SERVICE] received cmd: {eventOperation.Type} objectId: {eventOperation.DeletedId}");
                 if (eventOperation.Type != EventOperationType.SpaceDeleteEvent) return;
-                var operationResult = _spaceServiceManager.DeleteSpaceId(eventOperation.DeletedId, stoppingToken).Result;
+                var operationResult = _spaceServiceManager.DeleteSpaceId(eventOperation.DeletedId, stoppingToken);
 
                 Console.WriteLine(operationResult ?
                     $"{DateTimeOffset.Now} | [SPACE SERVICE] operation result success" : $"{DateTimeOffset.Now} | [SPACE SERVICE] operation result error");

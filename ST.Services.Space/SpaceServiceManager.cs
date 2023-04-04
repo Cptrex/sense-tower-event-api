@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using ST.Services.Space.Interfaces;
 using System.Text;
-using System.Threading.Channels;
 using ST.Services.Space.Models;
 using RabbitMQ.Client;
 
@@ -18,7 +17,7 @@ public class SpaceServiceManager : ISpaceServiceManager
         _channel = rabbitMqConfigure.GetRabbitMQChannel();
     }
 
-    public async Task<bool> DeleteSpaceId(Guid spaceId, CancellationToken cancellationToken)
+    public bool DeleteSpaceId(Guid spaceId, CancellationToken cancellationToken)
     {
         var result = _spaceInstance.Spaces.RemoveAll(i => i == spaceId);
         if (result <= 0) return false;
@@ -30,7 +29,7 @@ public class SpaceServiceManager : ISpaceServiceManager
 
     public void RemoveEventByUsedSpace(Guid spaceId, CancellationToken cancellationToken)
     {
-        var operationModel = new EventOperationModel()
+        var operationModel = new EventOperationModel
         {
             DeletedId = spaceId,
             Type = EventOperationType.SpaceDeleteEvent

@@ -1,5 +1,16 @@
 version: '3.9'
 services:
+   identityserver4:
+      image: cptrex/identity-server-4
+      hostname: identityserver4
+      container_name: identityserver4
+      ports:
+         - 5001:80
+      expose:
+         - 5001
+         - 80
+      networks:
+         - stnetworkapi
    rabbitmq:
       image: rabbitmq:3.11.11-management
       hostname: rabbitmq
@@ -33,31 +44,31 @@ services:
       networks:
          - stnetworkapi
       environment:
-         - ServiceEndpoints__TokenAuthorization=eyJhbGciOiJSUzI1NiIsImtpZCI6IjNFQzc5ODA3QTcyMUJDQTdBOTE3NEVFMkNBRTgzM0YxIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2ODA1NDY3MjksImV4cCI6MTY4MDU1MDMyOSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoibXlBcGkiLCJjbGllbnRfaWQiOiJzZW5zZXRvd2VyLWV2ZW50LWFwaSIsImp0aSI6IkNGNUQ1NERBNTE5QUQwNkMwMTA4QUEzNTUzMjhENkE0IiwiaWF0IjoxNjgwNTQ2NzI5LCJzY29wZSI6WyJteUFwaS5yZWFkIl19.CcMz9RWRRv_WBxzd1MFkJY1xML-IY71QGdX1mDSh_ei7HGNLnRcajWbeTQ9TL4s4DdgHaQEoPu1anUQyuo2bhuJ-3YcewihcMx-tcZwwffgT0KtICZ_oTD5y82e3WYuJ_Im07M8CoQo6tH5ZNka1nDkSYMvkVgEhPzlR_6ymWjaSsRMg8eE-u-9LpR_6JHcoOnNQOhccGUUrOBM6cPoRefUBj0omccr7f7DhyEdJIHgaT33tyQQSgb2nGtczd-5n14nu9VjvjaY5rP37UhPlr-nRwXSf7kqTSq9USXr0j94WeVlKhCbI2I0eXn-k891sF6UG7FM7NROc4E7mS1DyVw 
+         - ServiceEndpoints__TokenAuthorization=eyJhbGciOiJSUzI1NiIsImtpZCI6IkI4NTAzQzJFMkE2QTA5QTU4NzlCRUEzQTFFREQ4OTNDIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2ODA2MDk3NTQsImV4cCI6MTY4MDYxMzM1NCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoibXlBcGkiLCJjbGllbnRfaWQiOiJzZW5zZXRvd2VyLWV2ZW50LWFwaSIsImp0aSI6IjIyMjA5MTFDMjJGODJFMDZCQ0Q3RkREQzQxNzc5QTMxIiwiaWF0IjoxNjgwNjA5NzU0LCJzY29wZSI6WyJteUFwaS5yZWFkIl19.btix8Ob5alK72Vyuv3NW6msGNe1RCSI9sCxT0Fmb85f2nTGMm5NAznbzsWL8Wr7ASWR5aqJS44bjksU-UgtAidOKtL08Uum3-Ci73yuAY7PTOyVI0_xFuszZltxo3avOUwdZ0a9GybDxUbLlqzBvNOG3_HxZ_rRnXJyo7jT1VY55cQBYRHmdPb43V1v9muXyBW9NUQqpFXRZHqVatLP2w3wI48m2VMHXaMWCKi0h50HJPEkkavpwnRXfg5cGBcezngo2B398FxjsLZgUKalVx6qtv6F2o7_5u0V6DvcujI6brQATQw1dRwJpMNLeWDyN4z9EjMlQFesF1aGD9K689g
          - ServiceEndpoints__EventService__URL=http://localhost:5030
          - ServiceEndpoints__RabbitMQ__Hostname=rabbitmq
          - ServiceEndpoints__RabbitMQ__Port=5672
          - ServiceEndpoints__RabbitMQ__User=guest
          - ServiceEndpoints__RabbitMQ__Password=guest
-         - IdentityServer4Settings__Authority=http://localhost:5001
+         - IdentityServer4Settings__Authority=http://192.168.0.104:5001
          - IdentityServer4Settings__Audience=myApi
    st-space:
       image: cptrex/st-service-space
       ports:
          - 5040:80
       depends_on:
-         - rabbitmq
+        - rabbitmq
       restart: always
       networks:
          - stnetworkapi
       environment:
-         - ServiceEndpoints__TokenAuthorization=eyJhbGciOiJSUzI1NiIsImtpZCI6IjNFQzc5ODA3QTcyMUJDQTdBOTE3NEVFMkNBRTgzM0YxIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2ODA1NDY3MjksImV4cCI6MTY4MDU1MDMyOSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoibXlBcGkiLCJjbGllbnRfaWQiOiJzZW5zZXRvd2VyLWV2ZW50LWFwaSIsImp0aSI6IkNGNUQ1NERBNTE5QUQwNkMwMTA4QUEzNTUzMjhENkE0IiwiaWF0IjoxNjgwNTQ2NzI5LCJzY29wZSI6WyJteUFwaS5yZWFkIl19.CcMz9RWRRv_WBxzd1MFkJY1xML-IY71QGdX1mDSh_ei7HGNLnRcajWbeTQ9TL4s4DdgHaQEoPu1anUQyuo2bhuJ-3YcewihcMx-tcZwwffgT0KtICZ_oTD5y82e3WYuJ_Im07M8CoQo6tH5ZNka1nDkSYMvkVgEhPzlR_6ymWjaSsRMg8eE-u-9LpR_6JHcoOnNQOhccGUUrOBM6cPoRefUBj0omccr7f7DhyEdJIHgaT33tyQQSgb2nGtczd-5n14nu9VjvjaY5rP37UhPlr-nRwXSf7kqTSq9USXr0j94WeVlKhCbI2I0eXn-k891sF6UG7FM7NROc4E7mS1DyVw
+         - ServiceEndpoints__TokenAuthorization=eyJhbGciOiJSUzI1NiIsImtpZCI6IkI4NTAzQzJFMkE2QTA5QTU4NzlCRUEzQTFFREQ4OTNDIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2ODA2MDk3NTQsImV4cCI6MTY4MDYxMzM1NCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoibXlBcGkiLCJjbGllbnRfaWQiOiJzZW5zZXRvd2VyLWV2ZW50LWFwaSIsImp0aSI6IjIyMjA5MTFDMjJGODJFMDZCQ0Q3RkREQzQxNzc5QTMxIiwiaWF0IjoxNjgwNjA5NzU0LCJzY29wZSI6WyJteUFwaS5yZWFkIl19.btix8Ob5alK72Vyuv3NW6msGNe1RCSI9sCxT0Fmb85f2nTGMm5NAznbzsWL8Wr7ASWR5aqJS44bjksU-UgtAidOKtL08Uum3-Ci73yuAY7PTOyVI0_xFuszZltxo3avOUwdZ0a9GybDxUbLlqzBvNOG3_HxZ_rRnXJyo7jT1VY55cQBYRHmdPb43V1v9muXyBW9NUQqpFXRZHqVatLP2w3wI48m2VMHXaMWCKi0h50HJPEkkavpwnRXfg5cGBcezngo2B398FxjsLZgUKalVx6qtv6F2o7_5u0V6DvcujI6brQATQw1dRwJpMNLeWDyN4z9EjMlQFesF1aGD9K689g
          - ServiceEndpoints__EventService__URL=http://localhost:5030
          - ServiceEndpoints__RabbitMQ__Hostname=rabbitmq
          - ServiceEndpoints__RabbitMQ__Port=5672
          - ServiceEndpoints__RabbitMQ__User=guest
          - ServiceEndpoints__RabbitMQ__Password=guest
-         - IdentityServer4Settings__Authority=http://localhost:5001
+         - IdentityServer4Settings__Authority=http://192.168.0.104:5001
          - IdentityServer4Settings__Audience=myApi
    st-payment:
       image: cptrex/st-service-payment
@@ -69,8 +80,8 @@ services:
       networks:
          - stnetworkapi
       environment:
-         - ServiceEndpoints__TokenAuthorization=eyJhbGciOiJSUzI1NiIsImtpZCI6IjNFQzc5ODA3QTcyMUJDQTdBOTE3NEVFMkNBRTgzM0YxIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2ODA1NDY3MjksImV4cCI6MTY4MDU1MDMyOSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoibXlBcGkiLCJjbGllbnRfaWQiOiJzZW5zZXRvd2VyLWV2ZW50LWFwaSIsImp0aSI6IkNGNUQ1NERBNTE5QUQwNkMwMTA4QUEzNTUzMjhENkE0IiwiaWF0IjoxNjgwNTQ2NzI5LCJzY29wZSI6WyJteUFwaS5yZWFkIl19.CcMz9RWRRv_WBxzd1MFkJY1xML-IY71QGdX1mDSh_ei7HGNLnRcajWbeTQ9TL4s4DdgHaQEoPu1anUQyuo2bhuJ-3YcewihcMx-tcZwwffgT0KtICZ_oTD5y82e3WYuJ_Im07M8CoQo6tH5ZNka1nDkSYMvkVgEhPzlR_6ymWjaSsRMg8eE-u-9LpR_6JHcoOnNQOhccGUUrOBM6cPoRefUBj0omccr7f7DhyEdJIHgaT33tyQQSgb2nGtczd-5n14nu9VjvjaY5rP37UhPlr-nRwXSf7kqTSq9USXr0j94WeVlKhCbI2I0eXn-k891sF6UG7FM7NROc4E7mS1DyVw
-         - IdentityServer4Settings__Authority=http://localhost:5001
+         - ServiceEndpoints__TokenAuthorization=eyJhbGciOiJSUzI1NiIsImtpZCI6IkI4NTAzQzJFMkE2QTA5QTU4NzlCRUEzQTFFREQ4OTNDIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2ODA2MDk3NTQsImV4cCI6MTY4MDYxMzM1NCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjoibXlBcGkiLCJjbGllbnRfaWQiOiJzZW5zZXRvd2VyLWV2ZW50LWFwaSIsImp0aSI6IjIyMjA5MTFDMjJGODJFMDZCQ0Q3RkREQzQxNzc5QTMxIiwiaWF0IjoxNjgwNjA5NzU0LCJzY29wZSI6WyJteUFwaS5yZWFkIl19.btix8Ob5alK72Vyuv3NW6msGNe1RCSI9sCxT0Fmb85f2nTGMm5NAznbzsWL8Wr7ASWR5aqJS44bjksU-UgtAidOKtL08Uum3-Ci73yuAY7PTOyVI0_xFuszZltxo3avOUwdZ0a9GybDxUbLlqzBvNOG3_HxZ_rRnXJyo7jT1VY55cQBYRHmdPb43V1v9muXyBW9NUQqpFXRZHqVatLP2w3wI48m2VMHXaMWCKi0h50HJPEkkavpwnRXfg5cGBcezngo2B398FxjsLZgUKalVx6qtv6F2o7_5u0V6DvcujI6brQATQw1dRwJpMNLeWDyN4z9EjMlQFesF1aGD9K689g
+         - IdentityServer4Settings__Authority=http://192.168.0.104:5001
          - IdentityServer4Settings__Audience=myApi
 networks:
    stnetworkapi:

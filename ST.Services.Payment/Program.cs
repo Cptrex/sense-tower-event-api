@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
 using ST.Services.Payment.Interfaces;
+using ST.Services.Payment.Middleware;
 using ST.Services.Payment.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,8 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton<IPaymentsSingleton, PaymentsSingleton>();
 
 var app = builder.Build();
+
+app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
 app.UseCors(b =>
 {

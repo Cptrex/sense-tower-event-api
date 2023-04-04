@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
-using MediatR;
+using SenseTowerEventAPI.Interfaces;
 
 namespace SenseTowerEventAPI.Features.Ticket.AddTicket;
 
@@ -9,7 +9,7 @@ namespace SenseTowerEventAPI.Features.Ticket.AddTicket;
 /// </summary>
 [UsedImplicitly]
 [SuppressMessage("ReSharper", "UnusedMember.Global")]
-public class AddTicketCommand : IRequest<Guid>
+public class AddTicketCommand : ICommand<Guid>
 {
     public Guid Id { get; set; }
     public Guid EventId { get; set; }
