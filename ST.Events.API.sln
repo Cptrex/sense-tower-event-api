@@ -5,8 +5,6 @@ VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ST.Events.API", "ST.Events.API\ST.Events.API.csproj", "{0A2BE6E5-EDA9-4487-8E3C-B09EEE6E7AEA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SC.Internship.Common", "SC.Internship.Common\SC.Internship.Common\SC.Internship.Common.csproj", "{8BD176C8-1A0F-4843-AD77-C6DE6E65C164}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ST.Services.Image", "ST.Services.Image\ST.Services.Image.csproj", "{768D0C96-CADA-4D30-98F5-5F60084C30A7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ST.Services.Space", "ST.Services.Space\ST.Services.Space.csproj", "{CA1DF358-3158-4F24-8BF7-941376FC6D65}"
@@ -14,6 +12,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{176BAAF8-2189-4404-9C0B-0D57F3FEACBF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ST.Services.Payment", "ST.Services.Payment\ST.Services.Payment.csproj", "{DA318394-EAA3-4CC8-A89C-564F14B87826}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SC.Internship.Common", "SC.Internship.Common\SC.Internship.Common\SC.Internship.Common.csproj", "{2CB7C078-5A39-452E-A244-4E2EF6991FEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +25,6 @@ Global
 		{0A2BE6E5-EDA9-4487-8E3C-B09EEE6E7AEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A2BE6E5-EDA9-4487-8E3C-B09EEE6E7AEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A2BE6E5-EDA9-4487-8E3C-B09EEE6E7AEA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8BD176C8-1A0F-4843-AD77-C6DE6E65C164}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8BD176C8-1A0F-4843-AD77-C6DE6E65C164}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8BD176C8-1A0F-4843-AD77-C6DE6E65C164}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8BD176C8-1A0F-4843-AD77-C6DE6E65C164}.Release|Any CPU.Build.0 = Release|Any CPU
 		{768D0C96-CADA-4D30-98F5-5F60084C30A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{768D0C96-CADA-4D30-98F5-5F60084C30A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{768D0C96-CADA-4D30-98F5-5F60084C30A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -41,6 +37,10 @@ Global
 		{DA318394-EAA3-4CC8-A89C-564F14B87826}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA318394-EAA3-4CC8-A89C-564F14B87826}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA318394-EAA3-4CC8-A89C-564F14B87826}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CB7C078-5A39-452E-A244-4E2EF6991FEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CB7C078-5A39-452E-A244-4E2EF6991FEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CB7C078-5A39-452E-A244-4E2EF6991FEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CB7C078-5A39-452E-A244-4E2EF6991FEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
