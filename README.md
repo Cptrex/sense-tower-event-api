@@ -81,7 +81,7 @@ _____
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "SenseTowerEventAPI": {
+    "ST.Events.API": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
@@ -133,6 +133,6 @@ body: {
     grant_type = "client_credentials",
     scope = "myApi.read",
     client_id = "sensetower-event-api",
-    client_secret = "sensetowereventapi"
+    client_secret = "ST.Events.API"
 }
 ```

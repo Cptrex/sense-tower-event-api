@@ -4,19 +4,19 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["./SenseTowerEventAPI/SenseTowerEventAPI.csproj", "SenseTowerEventAPI/"]
+COPY ["./ST.Events.API/ST.Events.API.csproj", "ST.Events.API/"]
 
-RUN dotnet restore "SenseTowerEventAPI/SenseTowerEventAPI.csproj"
+RUN dotnet restore "ST.Events.API/ST.Events.API.csproj"
 COPY . .
-WORKDIR "/src/SenseTowerEventAPI"
-RUN dotnet build "SenseTowerEventAPI.csproj" -c Release -o /app/build
+WORKDIR "/src/ST.Events.API"
+RUN dotnet build "ST.Events.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "SenseTowerEventAPI.csproj" -c Release -o /app/publish
+RUN dotnet publish "ST.Events.API.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 
 COPY --from=publish /app/publish .
 
-ENTRYPOINT ["dotnet", "SenseTowerEventAPI.dll"]
+ENTRYPOINT ["dotnet", "ST.Events.API.dll"]
