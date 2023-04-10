@@ -1,4 +1,4 @@
-# Sense Tower Event API
+# ST Event API
 
 ### Требования к использованию
 1. Docker
